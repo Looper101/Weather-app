@@ -17,6 +17,7 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   GeolocationBloc({this.geolocatorRepository}) : super(null) {
     _streamSubscription =
         this.geolocatorRepository.onPositionChanged().listen((newPosition) {
+      print("GEOLOCATIONBLOC newposition:$newPosition");
       _positionModel = PositionModel(
           latitude: newPosition.latitude, longitude: newPosition.longitude);
       add(LocationChanged(position: _positionModel));
@@ -64,3 +65,5 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     return super.close();
   }
 }
+
+//TODO:Add geolocation permission to android manifest file xml 👌👌

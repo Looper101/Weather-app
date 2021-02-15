@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:songlyrics/repositories/geolocator_repository.dart';
 import 'package:songlyrics/repositories/weather_repositories.dart';
 import 'package:songlyrics/theme/color.dart';
@@ -13,14 +13,15 @@ void main() {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => WeatherBloc(
-            weatherRepository: WeatherRepository(),
-            geolocationBloc: GeolocationBloc(),
-          ),
-        ),
-        BlocProvider(
             create: (context) =>
                 GeolocationBloc(geolocatorRepository: GeolocatorRepository())),
+        BlocProvider(
+          create: (context) => WeatherBloc(
+            weatherRepository: WeatherRepository(),
+            geolocationBloc:
+                GeolocationBloc(geolocatorRepository: GeolocatorRepository()),
+          ),
+        ),
       ],
       child: MyApp(),
     ),
@@ -52,7 +53,27 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         backgroundColor: Pallete.color3,
         body: SafeArea(
-          child: HomePage(),
+          child: BlocConsumer<GeolocationBloc, GeolocationState>(
+            listener: (context, state) {
+              if (state is GeolocationLoadError) {
+                showDialog(
+                    context: context,
+                    builder: (context) =>
+                        AlertDialog(title: Text(state.errorMessage)));
+              }
+            },
+            builder: (context, state) {
+              if (state is GeolocationLoaded) {
+                return HomePage();
+              }
+
+              return Center(
+                child: SpinKitCircle(
+                  color: Pallete.errorColor,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
