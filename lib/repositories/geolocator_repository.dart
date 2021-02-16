@@ -1,22 +1,23 @@
-import 'package:geolocator/geolocator.dart';
-import 'package:songlyrics/dataproviders/geolocator_provider.dart';
-import 'package:songlyrics/models/position_model.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:songlyrics/dataproviders/geolocator_provider.dart';
+// import 'package:songlyrics/models/position_model.dart';
 
-class GeolocatorRepository {
-  GeolocatorApi _geolocatorApi;
+// class GeolocatorRepository {
+//   GeolocatorApi _geolocatorApi;
 
-  checkPermission() async => _geolocatorApi.geolocatorPermission;
+//   ///Returns a future of LocationPermission--Permission check
+//   Future<LocationPermission> checkPermission() async =>
+//       _geolocatorApi.checkPermission();
 
-  Future<PositionModel> getCurrentLocation() async {
-    Position position = await _geolocatorApi.getCurrentLoaction();
+//   ///Ask for permission from User
+//   Future<LocationPermission> getPermission() async =>
+//       _geolocatorApi.getPermission();
 
-    PositionModel positionModel = PositionModel(
-        latitude: position.latitude, longitude: position.longitude);
-    print('Position:=>>>$positionModel');
-    return positionModel;
-  }
+//   ///Get current Location of the user
+//   Future<Position> getCurrentLocation() async =>
+//       await _geolocatorApi.getCurrentLocation();
 
-  Stream<Position> onPositionChanged() async* {
-    yield* _geolocatorApi.onPositionChange();
-  }
-}
+//   Stream<Position> onPositionChanged() async* {
+//     yield* _geolocatorApi.onPositionChange();
+//   }
+// }

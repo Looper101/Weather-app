@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:songlyrics/models/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:songlyrics/models/position_model.dart';
@@ -15,7 +16,7 @@ class WeatherApi {
   }
 
   ///Fetch weather data from serve using user location--WeatherProvider
-  Future<String> weatherDataForLocation(PositionModel loc) async {
+  Future<String> weatherDataForLocation(Position loc) async {
     String baseUrl =
         "https://api.openweathermap.org/data/2.5/weather?lat=${loc.latitude}&lon=${loc.longitude}&appid=$apiKey";
 

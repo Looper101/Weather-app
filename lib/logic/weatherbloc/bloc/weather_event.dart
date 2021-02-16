@@ -1,37 +1,37 @@
-part of 'weather_bloc.dart';
+// part of 'weather_bloc.dart';
 
-abstract class WeatherEvent extends Equatable {
-  const WeatherEvent();
+// abstract class WeatherEvent extends Equatable {
+//   const WeatherEvent();
 
-  @override
-  List<Object> get props => [];
-}
+//   @override
+//   List<Object> get props => [];
+// }
 
-//NOTE: FetchWeatherByLocation event will be called at app launch
+// //NOTE: FetchWeatherByLocation event will be called at app launch
 
-//Fetch weather data by typed city
-class FetchedWeatherTypedCity extends WeatherEvent {
-  final String query;
-  FetchedWeatherTypedCity({
-    this.query,
-  });
+// //Fetch weather data by typed city
+// class FetchedWeatherTypedCity extends WeatherEvent {
+//   final String query;
+//   FetchedWeatherTypedCity({
+//     this.query,
+//   });
 
-  @override
-  String toString() => 'FetchedWeatherTypedCity(query: $query)';
-  @override
-  List<Object> get props => [query];
-}
+//   @override
+//   String toString() => 'FetchedWeatherTypedCity(query: $query)';
+//   @override
+//   List<Object> get props => [query];
+// }
 
-//fecth weather data by user current location
+// //fecth weather data by user current location
 
-class FetchWeatherByLocation extends WeatherEvent {
-  final PositionModel location;
-  FetchWeatherByLocation({
-    this.location,
-  });
+// class FetchWeatherByLocation extends WeatherEvent {
+//   final Position location;
+//   FetchWeatherByLocation({
+//     this.location,
+//   });
 
-  @override
-  String toString() => 'FetchWeatherByLocation(location: $location)';
-  @override
-  List<Object> get props => [location];
-}
+//   @override
+//   String toString() => 'FetchWeatherByLocation(location: $location)';
+//   @override
+//   List<Object> get props => [location];
+// }

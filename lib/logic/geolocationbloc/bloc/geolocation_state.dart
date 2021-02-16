@@ -12,7 +12,7 @@ class GeolocationInitial extends GeolocationState {}
 class GeolocationLoading extends GeolocationState {}
 
 class GeolocationLoaded extends GeolocationState {
-  final PositionModel position;
+  final geo.LocationResult position;
   GeolocationLoaded({
     this.position,
   });
@@ -26,6 +26,6 @@ class GeolocationLoadError extends GeolocationState {
   GeolocationLoadError({
     this.errorMessage,
   });
-    @override
+  @override
   List<Object> get props => [errorMessage];
 }

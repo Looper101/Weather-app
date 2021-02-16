@@ -10,7 +10,7 @@ abstract class GeolocationEvent extends Equatable {
 class FindLocation extends GeolocationEvent {}
 
 class LocationChanged extends GeolocationEvent {
-  final PositionModel position;
+  final geo.LocationResult position;
   LocationChanged({
     this.position,
   });
