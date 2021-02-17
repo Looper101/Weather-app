@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:songlyrics/repositories/geolocator_repository.dart';
 
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
@@ -46,8 +47,10 @@ class _MyAppState extends State<MyApp> {
       home: MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => GeolocationBloc(geolocator: Geolocator())
-                ..add(FindLocation())),
+            create: (context) =>
+                GeolocationBloc(geolocatorRepository: GeolocatorRepository())
+                  ..add(FindLocation()),
+          ),
         ],
         child: Scaffold(
           backgroundColor: Pallete.color3,

@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:geolocator/geolocator.dart' as geo;
+import 'package:location/location.dart';
 // as geo;
 import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
+import 'package:songlyrics/repositories/geolocator_repository.dart';
 part 'geolocation_state.dart';
 
 class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
@@ -22,12 +24,9 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   //     add(LocationChanged(position: _positionModel));
   //   });
   // }
-  final Geolocator _geolocator;
-  StreamSubscription _locationStreamSubscription;
-  GeolocationBloc({@required Geolocator geolocator})
-      : assert(geolocator != null),
-        _geolocator = geolocator,
-        super(GeolocationInitial());
+
+  final GeolocatorRepository geolocatorRepository;
+  GeolocationBloc({this.geolocatorRepository}) : super(GeolocationInitial());
 
   @override
   Stream<GeolocationState> mapEventToState(
@@ -46,20 +45,11 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   Stream<GeolocationState> _mapFindLocationToState() async* {
     yield GeolocationLoading();
 
-    // _locationStreamSubscription?.cancel();
-    // _locationStreamSubscription = Geolocator.getPositionStream().listen(
-    //     (Position position) => add(LocationChanged(position: position)));
     try {
-      // var position = await Geolocator.getCurrentPosition(
-      //     forceAndroidLocationManager: true,
-      //     desiredAccuracy: LocationAccuracy.low);
-      // yield GeolocationLoaded(position: position);
-      _locationStreamSubscription?.cancel();
-      _locationStreamSubscription = geo.Geolocator.getPositionStream(
-              desiredAccuracy: geo.LocationAccuracy.low)
-          .listen((event) {
-        add(LocationChanged(position: event));
-      });
+      LocationData locationData =
+          await geolocatorRepository.getCurrentLocation();
+
+      add(LocationChanged(position: locationData));
     } catch (e) {
       yield GeolocationLoadError(errorMessage: e.toString());
     }
@@ -75,10 +65,5 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   //     yield GeolocationLoadError(errorMessage: e.toString());
   //   }
   // }
-
-  @override
-  Future<void> close() {
-    _locationStreamSubscription.cancel();
-    return super.close();
-  }
+  
 }

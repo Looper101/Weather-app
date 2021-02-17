@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart' as geo;
+import 'package:location/location.dart';
 
 abstract class GeolocationEvent extends Equatable {
   const GeolocationEvent();
@@ -11,7 +12,7 @@ abstract class GeolocationEvent extends Equatable {
 class FindLocation extends GeolocationEvent {}
 
 class LocationChanged extends GeolocationEvent {
-  final geo.Position position;
+  final LocationData position;
   LocationChanged({
     this.position,
   });

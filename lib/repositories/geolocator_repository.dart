@@ -1,23 +1,33 @@
-// import 'package:geolocator/geolocator.dart';
-// import 'package:songlyrics/dataproviders/geolocator_provider.dart';
-// import 'package:songlyrics/models/position_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
+import 'package:songlyrics/dataproviders/geolocator_provider.dart';
 
-// class GeolocatorRepository {
-//   GeolocatorApi _geolocatorApi;
+// ignore: must_be_immutable
+class GeolocatorRepository extends Equatable {
+  GeolocatorApi _geolocatorApi = GeolocatorApi();
+  Location _location = Location();
+  Future<LocationData> getCurrentLocation() async =>
+      await _location.getLocation();
 
-//   ///Returns a future of LocationPermission--Permission check
-//   Future<LocationPermission> checkPermission() async =>
-//       _geolocatorApi.checkPermission();
+  @override
+  List<Object> get props => [];
 
-//   ///Ask for permission from User
-//   Future<LocationPermission> getPermission() async =>
-//       _geolocatorApi.getPermission();
+  // GeolocatorApi _geolocatorApi;
 
-//   ///Get current Location of the user
-//   Future<Position> getCurrentLocation() async =>
-//       await _geolocatorApi.getCurrentLocation();
+  // ///Returns a future of LocationPermission--Permission check
+  // Future<LocationPermission> checkPermission() async =>
+  //     _geolocatorApi.checkPermission();
 
-//   Stream<Position> onPositionChanged() async* {
-//     yield* _geolocatorApi.onPositionChange();
-//   }
-// }
+  // ///Ask for permission from User
+  // Future<LocationPermission> getPermission() async =>
+  //     _geolocatorApi.getPermission();
+
+  // ///Get current Location of the user
+  // Future<Position> getCurrentLocation() async =>
+  //     await _geolocatorApi.getCurrentLocation();
+
+  // Stream<Position> onPositionChanged() async* {
+  //   yield* _geolocatorApi.onPositionChange();
+  // }
+}

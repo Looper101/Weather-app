@@ -12,7 +12,7 @@ class GeolocationInitial extends GeolocationState {}
 class GeolocationLoading extends GeolocationState {}
 
 class GeolocationLoaded extends GeolocationState {
-  final geo.Position position;
+  final LocationData position;
   GeolocationLoaded({
     this.position,
   });
