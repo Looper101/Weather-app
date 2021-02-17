@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:songlyrics/repositories/geolocator_repository.dart';
-import 'package:songlyrics/repositories/weather_repositories.dart';
+
 import 'package:songlyrics/theme/color.dart';
-import 'dataproviders/geolocator_provider.dart';
+import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
 import 'logic/geolocationbloc/bloc/geolocation_bloc.dart';
-import 'logic/weatherbloc/bloc/weather_bloc.dart';
-import 'presentation/homepage.dart';
 
 void main() {
   runApp(
@@ -66,7 +63,7 @@ class _MyAppState extends State<MyApp> {
               },
               builder: (context, state) {
                 if (state is GeolocationLoaded) {
-                  return Text(state.position.location.longitude.toString());
+                  return Text(state.position.latitude.toString());
                   // HomePage();
                 }
                 if (state is GeolocationInitial) {
@@ -74,8 +71,22 @@ class _MyAppState extends State<MyApp> {
                 }
                 if (state is GeolocationLoading) {
                   return Center(
-                    child: SpinKitChasingDots(
-                      color: Pallete.errorColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FlatButton(
+                          color: Pallete.errorColor,
+                          onPressed: () async {
+                            var result = await Geolocator.getCurrentPosition(
+                                    forceAndroidLocationManager: true)
+                                .then((value) => print(value));
+                          },
+                          child: Text('Get location'),
+                        ),
+                        SpinKitChasingDots(
+                          color: Pallete.errorColor,
+                        ),
+                      ],
                     ),
                   );
                 }

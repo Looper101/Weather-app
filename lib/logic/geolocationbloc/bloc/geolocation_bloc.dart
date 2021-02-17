@@ -4,8 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:new_geolocation/geolocation.dart' as geo;
-part 'geolocation_event.dart';
+
+import 'package:geolocator/geolocator.dart' as geo;
+// as geo;
+import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
 part 'geolocation_state.dart';
 
 class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
@@ -53,9 +55,9 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
       //     desiredAccuracy: LocationAccuracy.low);
       // yield GeolocationLoaded(position: position);
       _locationStreamSubscription?.cancel();
-      _locationStreamSubscription =
-          geo.Geolocation.currentLocation(accuracy: geo.LocationAccuracy.best)
-              .listen((event) {
+      _locationStreamSubscription = geo.Geolocator.getPositionStream(
+              desiredAccuracy: geo.LocationAccuracy.low)
+          .listen((event) {
         add(LocationChanged(position: event));
       });
     } catch (e) {
