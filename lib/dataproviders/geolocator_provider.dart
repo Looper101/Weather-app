@@ -32,9 +32,6 @@ import 'package:location/location.dart';
 class GeolocatorApi {
   Location _location;
 
-  Future getCurrentLocation() async {
-    LocationData locationData = await _location.getLocation();
-
-    return locationData;
-  }
+  Future<LocationData> getCurrentLocation() async =>
+      await _location.getLocation();
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+
+import 'mediaquery.dart';
 
 class Pallete {
   static Color textColor = Color(0xFF090B11); // Color(0xFFC4D3E3);

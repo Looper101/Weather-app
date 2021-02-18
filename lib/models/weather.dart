@@ -2,8 +2,8 @@ import 'dart:convert';
 
 class Weather {
   final double temperature;
-  final int latitude;
-  final int longitude;
+  final double latitude;
+  final double longitude;
   final String countryName;
   final String cityName;
   final int condition;

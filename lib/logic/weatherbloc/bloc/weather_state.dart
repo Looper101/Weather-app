@@ -1,38 +1,38 @@
-// part of 'weather_bloc.dart';
+part of 'weather_bloc.dart';
 
-// abstract class WeatherState extends Equatable {
-//   const WeatherState();
+abstract class WeatherState extends Equatable {
+  const WeatherState();
 
-//   @override
-//   List<Object> get props => [];
-// }
+  @override
+  List<Object> get props => [];
+}
 
-// class WeatherInitial extends WeatherState {}
+class WeatherInitial extends WeatherState {}
 
-// class WeatherLoading extends WeatherState {}
+class WeatherLoading extends WeatherState {}
 
-// class WeatherLoaded extends WeatherState {
-//   final Weather weather;
-//   WeatherLoaded({
-//     this.weather,
-//   });
+class WeatherLoaded extends WeatherState {
+  final Weather weather;
+  WeatherLoaded({
+    this.weather,
+  });
 
-//   @override
-//   List<Object> get props => [weather];
+  @override
+  List<Object> get props => [weather];
 
-//   @override
-//   String toString() => 'WeatherLoaded(weather: $weather)';
-// }
+  @override
+  String toString() => 'WeatherLoaded(weather: $weather)';
+}
 
-// class WeatherLoadError extends WeatherState {
-//   final String errorMessage;
-//   WeatherLoadError({
-//     this.errorMessage,
-//   });
+class WeatherLoadError extends WeatherState {
+  final String errorMessage;
+  WeatherLoadError({
+    this.errorMessage,
+  });
 
-//   @override
-//   List<Object> get props => [errorMessage];
+  @override
+  List<Object> get props => [errorMessage];
 
-//   @override
-//   String toString() => 'WeatherLoadError(errorMessage: $errorMessage)';
-// }
+  @override
+  String toString() => 'WeatherLoadError(errorMessage: $errorMessage)';
+}

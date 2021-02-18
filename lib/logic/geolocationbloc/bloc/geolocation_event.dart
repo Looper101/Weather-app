@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:geolocator/geolocator.dart' as geo;
 import 'package:location/location.dart';
 
 abstract class GeolocationEvent extends Equatable {
