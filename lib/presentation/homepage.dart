@@ -32,7 +32,10 @@ class HomePage extends StatelessWidget {
               }
               if (state is WeatherLoading) {
                 return Expanded(
-                  child: Center(child: SpinKitCircle(color: Pallete.color2)),
+                  child: Center(
+                      child: SpinKitChasingDots(
+                    color: Pallete.errorColor,
+                  )),
                 );
               }
               if (state is WeatherLoadError) {
@@ -43,7 +46,7 @@ class HomePage extends StatelessWidget {
                 child: Center(
                   child: SpinKitFadingFour(
                     duration: Duration(seconds: 1),
-                    color: Pallete.color2,
+                    color: Pallete.textColor,
                   ),
                 ),
               );
@@ -87,7 +90,7 @@ Column windDetails(WeatherLoaded state) {
             size: DeviceOrientation.longestSide * 0.035,
           ),
           SizedBox(width: DeviceOrientation.screenWidth * 0.025),
-          Text('${state.weather.windSpeed.toInt()}m/s',
+          Text('${state.weather.windSpeed.toInt()} m/s',
               style: Pallete.textStyle.copyWith(fontSize: 17)),
         ],
       )
@@ -97,9 +100,9 @@ Column windDetails(WeatherLoaded state) {
 
 countryName(WeatherLoaded state) {
   var cityName = state.weather.cityName;
-  var temp = state.weather.temperature;
-  var long = state.weather.longitude;
-  var lat = state.weather.latitude;
+  // var temp = state.weather.temperature;
+  // var long = state.weather.longitude;
+  // var lat = state.weather.latitude;
   var country = state.weather.countryName;
   return Column(
     children: [
@@ -107,7 +110,7 @@ countryName(WeatherLoaded state) {
       Text(
         '$cityName/$country',
         style: TextStyle(
-          color: Pallete.textColor,
+          color: Pallete.errorColor,
           fontSize: 20,
           fontFamily: 'Bold',
         ),
@@ -170,7 +173,7 @@ Container weatherDetailsContainer(WeatherLoaded state) {
 
 foreCastContainer() {
   return Container(
-    color: Pallete.color3,
+    color: Pallete.color2,
     height: DeviceOrientation.screenHeight * 0.25,
     child: ListView.builder(
       itemCount: 4,

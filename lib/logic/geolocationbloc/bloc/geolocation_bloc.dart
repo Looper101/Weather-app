@@ -2,10 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-
-import 'package:geolocator/geolocator.dart' as geo;
 import 'package:location/location.dart';
 // as geo;
 import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
@@ -65,5 +61,5 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   //     yield GeolocationLoadError(errorMessage: e.toString());
   //   }
   // }
-  
+
 }

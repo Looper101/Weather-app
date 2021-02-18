@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/presentation/homepage.dart';
+import 'package:songlyrics/repositories/weather_forecast_repository.dart';
 import 'package:songlyrics/repositories/weather_repositories.dart';
+import 'logic/weather_forecast/bloc/forecast_bloc.dart';
 import 'repositories/geolocator_repository.dart';
 
 import 'theme/color.dart';
@@ -13,16 +14,6 @@ import 'logic/geolocationbloc/bloc/geolocation_bloc.dart';
 
 void main() {
   runApp(
-    // MultiBlocProvider(
-    //   providers: [
-
-    //     // BlocProvider(
-    //     //   create: (context) => WeatherBloc(
-    //     //     weatherRepository: WeatherRepository(),
-    //     //     geolocationBloc: BlocProvider.of<GeolocationBloc>(context),
-    //     //   ),
-    //     // ),
-    //   ],
     MyApp(),
   );
 }
@@ -55,13 +46,16 @@ class _MyAppState extends State<MyApp> {
                   ..add(FindLocation()),
           ),
           BlocProvider(
-            create: (context) => WeatherBloc(
-                weatherRepository: WeatherRepository(),
-                geolocationBloc: BlocProvider.of<GeolocationBloc>(context)),
-          )
+              create: (context) => ForecastBloc(
+                  geolocationBloc: BlocProvider.of<GeolocationBloc>(context),
+                  weatherForecastRepository: WeatherForecastRepository())),
+          BlocProvider(
+              create: (context) => WeatherBloc(
+                  weatherRepository: WeatherRepository(),
+                  geolocationBloc: BlocProvider.of<GeolocationBloc>(context)))
         ],
         child: Scaffold(
-          backgroundColor: Pallete.color3,
+          backgroundColor: Pallete.color2,
           body: HomePage(),
         ),
       ),

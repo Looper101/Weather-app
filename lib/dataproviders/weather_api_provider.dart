@@ -7,7 +7,7 @@ class WeatherApi {
   ///Fetch weather data by using the typed in city name--WeatherProvider
   Future<String> getRawData(String city) async {
     final String baseUrl =
-        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey';
+        'https://api.openweathermap.org/data/2.5/weather?q=$city&units=imperial&appid=$apiKey';
 
     http.Response response = await http.get(baseUrl);
     return response.body;

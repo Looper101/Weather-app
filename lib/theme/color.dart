@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'mediaquery.dart';
 
 class Pallete {
-  static Color textColor = Color(0xFF090B11); // Color(0xFFC4D3E3);
+  static Color textColor = Color((0xFFC4D3E3)); // Color(0xFFC4D3E3);
   static Color color2 = Color(0xFF090B11);
   static Color color3 = Color(0xFF95A1AE);
   static Color color4 = Color(0xFF50575F);
