@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class WeatherCondition {
@@ -20,7 +21,7 @@ class WeatherCondition {
     }
   }
 
-  static getIcon(int condition) {
+  static IconData getIcon(int condition) {
     if (condition <= 300) {
       return WeatherIcons.thunderstorm;
     } else if (condition <= 500) {

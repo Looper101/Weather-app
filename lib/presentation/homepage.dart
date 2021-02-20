@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:songlyrics/logic/weather_forecast/bloc/forecast_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/models/weather_condition_model.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
-import 'package:weather_icons/weather_icons.dart';
+import 'widgets/forecast_widget.dart';
+import 'widgets/upperpart.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController opacityController;
+
+  @override
+  void initState() {
+    opacityController = AnimationController(
+        duration: Duration(milliseconds: 1000),
+        vsync: this,
+        animationBehavior: AnimationBehavior.preserve);
+    opacityController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     DeviceOrientation deviceOrientation = DeviceOrientation();
@@ -29,7 +48,10 @@ class HomePage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is WeatherLoaded) {
-                return Expanded(child: upperWeatherContainer(state));
+                opacityController.forward();
+                return Expanded(
+                  child: upperWeatherContainer(state),
+                );
               }
               if (state is WeatherLoading) {
                 return Expanded(
@@ -53,175 +75,18 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          foreCastContainer(context),
+          Opacity(
+            opacity: opacityController.value,
+            child: foreCastContainer(context),
+          )
         ],
       ),
     );
   }
 }
 
-upperWeatherContainer(WeatherLoaded state) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      countryName(state),
-      SizedBox(height: DeviceOrientation.screenHeight * 0.02),
-      weatherDetailsContainer(state),
-      windDetails(state)
-    ],
+Widget searchTextFiled({Function(String) onChanged}) {
+  return TextField(
+    onChanged: onChanged,
   );
 }
-
-Column windDetails(WeatherLoaded state) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Text(
-        'Wind',
-        style: Pallete.textStyle.copyWith(
-            fontSize: 17, fontWeight: FontWeight.w100, fontFamily: 'Bold'),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BoxedIcon(
-            WeatherIcons.barometer,
-            color: Pallete.color4,
-            size: DeviceOrientation.longestSide * 0.035,
-          ),
-          SizedBox(width: DeviceOrientation.screenWidth * 0.025),
-          Text('${state.weather.windSpeed.toInt()} m/s',
-              style: Pallete.textStyle.copyWith(fontSize: 17)),
-        ],
-      )
-    ],
-  );
-}
-
-countryName(WeatherLoaded state) {
-  var cityName = state.weather.cityName;
-  // var temp = state.weather.temperature;
-  // var long = state.weather.longitude;
-  // var lat = state.weather.latitude;
-  var country = state.weather.countryName;
-  return Column(
-    children: [
-      SizedBox(height: DeviceOrientation.screenHeight * 0.03),
-      Text(
-        '$cityName/$country',
-        style: TextStyle(
-          color: Colors.red,
-          fontSize: 20,
-          fontFamily: 'Bold',
-        ),
-      ),
-      Text(
-        'Now',
-        style: TextStyle(
-          color: Pallete.textColor.withOpacity(0.7),
-          fontSize: 15,
-          fontFamily: 'Medium',
-        ),
-      ),
-    ],
-  );
-}
-
-Container weatherDetailsContainer(WeatherLoaded state) {
-  var cityName = state.weather.cityName;
-  var temp = state.weather.temperature;
-  var long = state.weather.longitude;
-  var lat = state.weather.latitude;
-  var country = state.weather.countryName;
-  var condition = state.weather.condition;
-  return Container(
-    // height: DeviceOrientation.screenHeight * 0.5,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          height: DeviceOrientation.screenHeight * 0.3,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              BoxedIcon(
-                WeatherCondition.getIcon(condition),
-                color: Pallete.textColor,
-                size: DeviceOrientation.longestSide * 0.09,
-              ),
-              Text(
-                '${temp.toInt()}°',
-                style: TextStyle(
-                    color: Pallete.textColor,
-                    fontSize: DeviceOrientation.longestSide * 0.08,
-                    fontFamily: 'Bold',
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                WeatherCondition.getMessage(condition),
-                style: Pallete.textStyle.copyWith(fontSize: 17),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 20),
-      ],
-    ),
-  );
-}
-
-foreCastContainer(BuildContext context) {
-  final bloc = BlocProvider.of<ForecastBloc>(context);
-  return Container(
-      color: Pallete.errorColor,
-      height: DeviceOrientation.screenHeight * 0.25,
-      child:
-          BlocBuilder<ForecastBloc, ForecastState>(builder: (context, state) {
-        if (state is ForecastInitial) {
-          return Center(
-            child: SpinKitHourGlass(
-              color: Pallete.color2,
-            ),
-          );
-        }
-
-        if (state is ForeCastLoadError) {
-          return Center(
-            child: Text(state.message,
-                style: TextStyle(color: Colors.white, fontSize: 25)),
-          );
-        }
-        if (state is ForecastLoaded) {
-          return ListView.builder(
-            itemCount: state.weatherForecast.list.length,
-            itemBuilder: (context, _) {
-              var date = state.weatherForecast.list[_].dtTxt;
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    '${date.day}-${date.month}-${date.year}',
-                    style: Pallete.textStyle.copyWith(fontSize: 15),
-                  ),
-                  BoxedIcon(WeatherIcons.day_rain, color: Pallete.textColor),
-                  Text(
-                    '11°23°',
-                    style: Pallete.textStyle.copyWith(fontSize: 15),
-                  )
-                ],
-              );
-            },
-          );
-        }
-
-        return Container();
-      }));
-}
-
-// // Widget searchTextFiled({Function(String) onChanged}) {
-// //   return TextField(
-// //     onChanged: onChanged,
-// //   );
-// // }
