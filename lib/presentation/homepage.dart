@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:songlyrics/logic/weather_forecast/bloc/forecast_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/models/weather_condition_model.dart';
 import 'package:songlyrics/theme/color.dart';
@@ -52,7 +53,7 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          foreCastContainer(),
+          foreCastContainer(context),
         ],
       ),
     );
@@ -110,7 +111,7 @@ countryName(WeatherLoaded state) {
       Text(
         '$cityName/$country',
         style: TextStyle(
-          color: Pallete.errorColor,
+          color: Colors.red,
           fontSize: 20,
           fontFamily: 'Bold',
         ),
@@ -119,7 +120,7 @@ countryName(WeatherLoaded state) {
         'Now',
         style: TextStyle(
           color: Pallete.textColor.withOpacity(0.7),
-          fontSize: 20,
+          fontSize: 15,
           fontFamily: 'Medium',
         ),
       ),
@@ -171,30 +172,52 @@ Container weatherDetailsContainer(WeatherLoaded state) {
   );
 }
 
-foreCastContainer() {
+foreCastContainer(BuildContext context) {
+  final bloc = BlocProvider.of<ForecastBloc>(context);
   return Container(
-    color: Pallete.color2,
-    height: DeviceOrientation.screenHeight * 0.25,
-    child: ListView.builder(
-      itemCount: 4,
-      itemBuilder: (context, _) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              'Tue,Apr 14',
-              style: Pallete.textStyle.copyWith(fontSize: 15),
+      color: Pallete.errorColor,
+      height: DeviceOrientation.screenHeight * 0.25,
+      child:
+          BlocBuilder<ForecastBloc, ForecastState>(builder: (context, state) {
+        if (state is ForecastInitial) {
+          return Center(
+            child: SpinKitHourGlass(
+              color: Pallete.color2,
             ),
-            BoxedIcon(WeatherIcons.day_rain, color: Pallete.textColor),
-            Text(
-              '11°23°',
-              style: Pallete.textStyle.copyWith(fontSize: 15),
-            )
-          ],
-        );
-      },
-    ),
-  );
+          );
+        }
+
+        if (state is ForeCastLoadError) {
+          return Center(
+            child: Text(state.message,
+                style: TextStyle(color: Colors.white, fontSize: 25)),
+          );
+        }
+        if (state is ForecastLoaded) {
+          return ListView.builder(
+            itemCount: state.weatherForecast.list.length,
+            itemBuilder: (context, _) {
+              var date = state.weatherForecast.list[_].dtTxt;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    '${date.day}-${date.month}-${date.year}',
+                    style: Pallete.textStyle.copyWith(fontSize: 15),
+                  ),
+                  BoxedIcon(WeatherIcons.day_rain, color: Pallete.textColor),
+                  Text(
+                    '11°23°',
+                    style: Pallete.textStyle.copyWith(fontSize: 15),
+                  )
+                ],
+              );
+            },
+          );
+        }
+
+        return Container();
+      }));
 }
 
 // // Widget searchTextFiled({Function(String) onChanged}) {

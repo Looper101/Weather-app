@@ -11,17 +11,17 @@ part 'forecast_event.dart';
 part 'forecast_state.dart';
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
-  GeolocationBloc geolocationBloc;
-  WeatherForecastRepository weatherForecastRepository;
+  final GeolocationBloc geolocationBloc;
+  final WeatherForecastRepository weatherForecastRepository;
   ForecastBloc({this.geolocationBloc, this.weatherForecastRepository})
       : super(ForecastInitial()) {
-    geolocationBloc.listen((state) {
+    _locationStreamSubscription = geolocationBloc.listen((state) {
       if (state is GeolocationLoaded) {
         add(ForecastFetched(locationData: state.position));
       }
     });
   }
-  // StreamSubscription _locationStreamSubscription;
+  StreamSubscription _locationStreamSubscription;
 
   @override
   Stream<ForecastState> mapEventToState(
@@ -34,26 +34,19 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
   Stream<ForecastState> _mapForecastFetchedToState(
       ForecastFetched event) async* {
-    if (state is ForecastLoaded) {
-      try {
-        WeatherForecast result = await weatherForecastRepository
-            .getWeatherForecastData(event.locationData);
-        print(result.dataList);
-        yield ForecastLoaded(
-            weatherForecast: WeatherForecast().copyWith(
-                cod: result.cod,
-                message: result.message,
-                dataList: result.dataList));
-      } catch (e) {
-        yield ForeCastLoadError(message: e.toString());
-      }
-    }
+    yield ForecastLoading();
     try {
-      WeatherForecast result = await weatherForecastRepository
+      Forecast result = await weatherForecastRepository
           .getWeatherForecastData(event.locationData);
       yield ForecastLoaded(weatherForecast: result);
     } catch (e) {
       yield ForeCastLoadError(message: e.toString());
     }
+  }
+
+  @override
+  Future<void> close() {
+    _locationStreamSubscription.cancel();
+    return super.close();
   }
 }

@@ -20,7 +20,7 @@ class ForeCastLoadError extends ForecastState {
 }
 
 class ForecastLoaded extends ForecastState {
-  final WeatherForecast weatherForecast;
+  final Forecast weatherForecast;
   ForecastLoaded({
     this.weatherForecast,
   });
