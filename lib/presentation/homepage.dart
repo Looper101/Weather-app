@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage>
           BlocConsumer<WeatherBloc, WeatherState>(
             listener: (context, state) {
               if (state is WeatherLoadError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                Scaffold.of(context).showSnackBar(SnackBar(
                   backgroundColor: Pallete.errorColor,
                   content: Text(state.errorMessage),
                 ));
