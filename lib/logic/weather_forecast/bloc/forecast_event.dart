@@ -7,6 +7,8 @@ abstract class ForecastEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class AppStarted extends ForecastEvent {}
+
 class ForecastFetched extends ForecastEvent {
   final LocationData locationData;
   ForecastFetched({

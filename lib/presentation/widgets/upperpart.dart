@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
+import 'package:songlyrics/models/weather.dart';
 import 'package:songlyrics/models/weather_condition_model.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
@@ -15,12 +16,6 @@ upperWeatherContainer(WeatherLoaded state) {
       SizedBox(height: DeviceOrientation.screenHeight * 0.00),
       weatherDetailsContainer(state),
       windDetails(state),
-      Text(
-        'Forecast',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      )
     ],
   );
 }
@@ -130,6 +125,16 @@ Container weatherDetailsContainer(WeatherLoaded state) {
         ),
         SizedBox(height: 20),
       ],
+    ),
+  );
+}
+
+Widget searchTextFiled({Function(String) onChanged}) {
+  return Container(
+    color: Colors.red,
+    child: TextField(
+      decoration: InputDecoration(fillColor: Pallete.color4),
+      onChanged: onChanged,
     ),
   );
 }

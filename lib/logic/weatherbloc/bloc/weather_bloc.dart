@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
+import 'package:songlyrics/repositories/geolocator_repository.dart';
 
 import '../../../models/weather.dart';
 import '../../../repositories/weather_repositories.dart';
@@ -13,17 +14,10 @@ part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;
-  final GeolocationBloc geolocationBloc;
 
-  StreamSubscription _streamSubscription;
-  WeatherBloc({this.weatherRepository, this.geolocationBloc})
-      : super(WeatherInitial()) {
-    _streamSubscription = geolocationBloc.listen((state) {
-      if (state is GeolocationLoaded) {
-        add(FetchWeatherByLocation(location: state.position));
-      }
-    });
-  }
+  GeolocatorRepository geolocatorRepository;
+  WeatherBloc({this.weatherRepository, this.geolocatorRepository})
+      : super(WeatherInitial());
 
   @override
   Stream<WeatherState> mapEventToState(
@@ -31,7 +25,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   ) async* {
     if (event is FetchWeatherByLocation) {
       yield WeatherLoading();
-      yield* _mapFetchWeatherByLocationtOState(event);
+      yield* _mapFetchWeatherByLocationtOState();
     }
     if (event is FetchedWeatherTypedCity) {
       yield WeatherLoading();
@@ -39,14 +33,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     }
   }
 
-  Stream<WeatherState> _mapFetchWeatherByLocationtOState(
-      FetchWeatherByLocation event) async* {
+  Stream<WeatherState> _mapFetchWeatherByLocationtOState() async* {
     yield WeatherLoading();
-    _streamSubscription?.cancel();
 
     try {
+      var _locationResult = await geolocatorRepository.getCurrentLocation();
+
       Weather weather =
-          await weatherRepository.fetchWeatherByLocation(event.location);
+          await weatherRepository.fetchWeatherByLocation(_locationResult);
       yield WeatherLoaded(weather: weather);
     } catch (e) {
       yield WeatherLoadError(errorMessage: e.toString());
@@ -62,11 +56,5 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     } catch (e) {
       yield WeatherLoadError(errorMessage: e.toString());
     }
-  }
-
-  @override
-  Future<void> close() {
-    _streamSubscription.cancel();
-    return super.close();
   }
 }

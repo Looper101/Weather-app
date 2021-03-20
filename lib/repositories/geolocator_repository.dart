@@ -6,7 +6,8 @@ import '../dataproviders/geolocator_provider.dart';
 // ignore: must_be_immutable
 class GeolocatorRepository extends Equatable {
   Location _location = Location();
-  Future<LocationData> getCurrentLocation() => _location.getLocation();
+  Future<LocationData> getCurrentLocation() async =>
+      await _location.getLocation();
 
   @override
   List<Object> get props => [];

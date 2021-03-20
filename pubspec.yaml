@@ -39,6 +39,7 @@ dependencies:
   provider: ^4.3.3
   location: ^3.2.4
   date_format: ^1.0.9
+  loading: ^1.0.2
 
 dev_dependencies:
   flutter_test:

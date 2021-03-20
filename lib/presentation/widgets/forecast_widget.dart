@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:loading/loading.dart';
+import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/models/weather_forecast.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -12,40 +15,16 @@ import 'package:songlyrics/theme/mediaquery.dart';
 foreCastContainer(BuildContext context) {
   return Container(
       color: Pallete.color2,
-      height: DeviceOrientation.screenHeight * 0.25,
-      child:
-          BlocBuilder<ForecastBloc, ForecastState>(builder: (context, state) {
-        if (state is ForecastInitial) {
-          return Center(
-            child: SpinKitHourGlass(
-              color: Pallete.color2,
-            ),
-          );
+      height: DeviceOrientation.screenHeight * 0.05,
+      child: BlocBuilder<WeatherBloc, WeatherState>(builder: (context, state) {
+        if (state is WeatherLoading) {
+          return Loading(
+              indicator: BallPulseIndicator(), size: 100.0, color: Colors.pink);
         }
 
-        if (state is ForeCastLoadError) {
-          return Center(
-            child: Text(state.message,
-                style: TextStyle(color: Colors.white, fontSize: 25)),
-          );
+        if (state is WeatherLoaded) {
+          Text('hsadjh');
         }
-        if (state is ForecastLoaded) {
-          return ListView.builder(
-            itemCount: state.weatherForecast.list.length,
-            itemBuilder: (context, _) {
-              var weatherForecast = state.weatherForecast.list[_];
-              var date = state.weatherForecast.list[_].dtTxt;
-              var condition = state.weatherForecast.list[_].weather.first;
-              return ForecastItem(
-                date: date,
-                cod: condition.id,
-                weatherForecast: weatherForecast,
-              );
-            },
-          );
-        }
-
-        return Container();
       }));
 }
 
@@ -64,8 +43,9 @@ class ForecastItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
-      margin: EdgeInsets.symmetric(vertical: 5),
+      width: DeviceOrientation.screenWidth * 0.55,
+      color: Pallete.color2,
+      margin: EdgeInsets.symmetric(horizontal: 10),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +55,7 @@ class ForecastItem extends StatelessWidget {
             height: DeviceOrientation.screenHeight * 0.06,
             width: DeviceOrientation.screenWidth * 0.2,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.red,
               borderRadius: BorderRadius.circular(5),
             ),
             child: BoxedIcon(WeatherCondition.getIcon(cod)),
@@ -84,9 +64,12 @@ class ForecastItem extends StatelessWidget {
             '${weekdayParse(date.weekday)}',
             // -${monthParse(date.month)}-${date.year}',
             style:
-                Pallete.textStyle.copyWith(fontSize: 15, color: Colors.black),
+                Pallete.textStyle.copyWith(fontSize: 15, color: Colors.white),
           ),
-          BoxedIcon(WeatherCondition.getIcon(cod)),
+          BoxedIcon(
+            WeatherCondition.getIcon(cod),
+            color: Colors.white,
+          ),
           Text(
             '${weatherForecast.main.temp.toInt()}°°',
             style: Pallete.textStyle.copyWith(fontSize: 15),

@@ -25,13 +25,5 @@ class FetchedWeatherTypedCity extends WeatherEvent {
 //fecth weather data by user current location
 
 class FetchWeatherByLocation extends WeatherEvent {
-  final LocationData location;
-  FetchWeatherByLocation({
-    this.location,
-  });
-
-  @override
-  String toString() => 'FetchWeatherByLocation(location: $location)';
-  @override
-  List<Object> get props => [location];
+  FetchWeatherByLocation();
 }

@@ -3,41 +3,36 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
-import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_bloc.dart';
 import 'package:songlyrics/models/weather_forecast.dart';
+import 'package:songlyrics/repositories/geolocator_repository.dart';
 import 'package:songlyrics/repositories/weather_forecast_repository.dart';
 
 part 'forecast_event.dart';
 part 'forecast_state.dart';
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
-  final GeolocationBloc geolocationBloc;
+  final GeolocatorRepository geolocatorRepository;
   final WeatherForecastRepository weatherForecastRepository;
-  ForecastBloc({this.geolocationBloc, this.weatherForecastRepository})
-      : super(ForecastInitial()) {
-    _locationStreamSubscription = geolocationBloc.listen((state) {
-      if (state is GeolocationLoaded) {
-        add(ForecastFetched(locationData: state.position));
-      }
-    });
-  }
-  StreamSubscription _locationStreamSubscription;
+
+  ForecastBloc({this.weatherForecastRepository, this.geolocatorRepository})
+      : super(ForecastInitial());
 
   @override
   Stream<ForecastState> mapEventToState(
     ForecastEvent event,
   ) async* {
-    if (event is ForecastFetched) {
-      yield* _mapForecastFetchedToState(event);
+    if (event is AppStarted) {
+      yield* _mapForecastFetchedToState();
     }
   }
 
-  Stream<ForecastState> _mapForecastFetchedToState(
-      ForecastFetched event) async* {
+  Stream<ForecastState> _mapForecastFetchedToState() async* {
     yield ForecastLoading();
     try {
+      var _geolocationResult = await geolocatorRepository.getCurrentLocation();
+
       Forecast result = await weatherForecastRepository
-          .getWeatherForecastData(event.locationData);
+          .getWeatherForecastData(_geolocationResult);
       yield ForecastLoaded(weatherForecast: result);
     } catch (e) {
       yield ForeCastLoadError(message: e.toString());
@@ -46,7 +41,6 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
   @override
   Future<void> close() {
-    _locationStreamSubscription.cancel();
     return super.close();
   }
 }

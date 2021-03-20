@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/presentation/homepage.dart';
+import 'package:songlyrics/repositories/city_name_repository.dart';
 import 'package:songlyrics/repositories/weather_forecast_repository.dart';
 import 'package:songlyrics/repositories/weather_repositories.dart';
+import 'logic/city_search/city_search_bloc.dart';
 import 'logic/weather_forecast/bloc/forecast_bloc.dart';
 import 'repositories/geolocator_repository.dart';
 
-import 'theme/color.dart';
-import 'logic/geolocationbloc/bloc/geolocation_event.dart';
-import 'logic/geolocationbloc/bloc/geolocation_bloc.dart';
-
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(
     MyApp(),
   );
@@ -34,30 +34,30 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
+      title: 'Forecaster',
+      theme: ThemeData(primarySwatch: Colors.red),
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) =>
-                GeolocationBloc(geolocatorRepository: GeolocatorRepository())
-                  ..add(FindLocation()),
-          ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       GeolocationBloc(geolocatorRepository: GeolocatorRepository())
+          //         ..add(FindLocation()),
+          // ),
+
           BlocProvider(
               create: (context) => ForecastBloc(
-                  geolocationBloc: BlocProvider.of<GeolocationBloc>(context),
-                  weatherForecastRepository: WeatherForecastRepository())),
+                  // geolocationBloc: BlocProvider.of<GeolocationBloc>(context),
+                  weatherForecastRepository: WeatherForecastRepository())
+                ..add(AppStarted())),
           BlocProvider(
               create: (context) => WeatherBloc(
-                  weatherRepository: WeatherRepository(),
-                  geolocationBloc: BlocProvider.of<GeolocationBloc>(context)))
+                    weatherRepository: WeatherRepository(),
+                    geolocatorRepository: GeolocatorRepository(),
+                  )..add(FetchWeatherByLocation())),
+
+          BlocProvider(create: (context) => CitySearchBloc(CityNameRepo()))
         ],
-        child: Scaffold(
-          backgroundColor: Pallete.color2,
-          body: HomePage(),
-        ),
+        child: HomePage(),
       ),
     );
   }
