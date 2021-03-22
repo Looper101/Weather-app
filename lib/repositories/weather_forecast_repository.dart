@@ -9,8 +9,9 @@ class WeatherForecastRepository {
   Future<Forecast> getWeatherForecastData(LocationData loc) async {
     String result = await _weatherForeCastApi.getWeatherForecastData(loc);
 
-    Forecast weatherForecast = Forecast.fromRawJson(result);
+    // Forecast weatherForecast = Forecast.fromRawJson(result);
 
+    CityId cityId = CityId.fromRawJson(result);
     return weatherForecast;
   }
 }
