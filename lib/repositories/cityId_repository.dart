@@ -7,7 +7,7 @@ class CityIdRepository {
   CityIdApi _cityIdApi = CityIdApi();
 
   /// Fetch city-id data by the user typed city name ex-. London
-  Future<City> getWeatherData(String query) async {
+  Future<City> getCityIdByCityTyped(String query) async {
     String rawResponse = await _cityIdApi.getCityIdByQuery(query);
     City city = City.fromJson(rawResponse);
 

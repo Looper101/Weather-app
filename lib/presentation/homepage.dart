@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:loading/indicator/ball_pulse_indicator.dart';
-import 'package:loading/loading.dart';
-import 'package:songlyrics/logic/city_search/city_search_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
+import 'package:songlyrics/presentation/pages/search_page.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 import 'widgets/upperpart.dart';
 
 class HomePage extends StatefulWidget {
+  static String id = 'homepage';
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -41,10 +40,7 @@ class _HomePageState extends State<HomePage>
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchDelegate(),
-              );
+              Navigator.pushNamed(context, SearchPage.id);
             },
           )
         ],
@@ -96,10 +92,6 @@ class _HomePageState extends State<HomePage>
                 );
               },
             ),
-            // Opacity(
-            //   opacity: opacityController.value,
-            //   child: foreCastContainer(context),
-            // )
           ],
         ),
       ),
@@ -107,59 +99,63 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-class CustomSearchDelegate extends SearchDelegate {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      )
-    ];
-  }
+// class CustomSearchDelegate extends SearchDelegate {
+//   set query(String value) {
+//     assert(query != null);
+//   }
 
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        icon: Icon(Icons.arrow_back_ios),
-        onPressed: () => Navigator.pop(context));
-  }
+//   @override
+//   List<Widget> buildActions(BuildContext context) {
+//     return [
+//       IconButton(
+//         icon: Icon(Icons.clear),
+//         onPressed: () {
+//           query = '';
+//         },
+//       )
+//     ];
+//   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    return BlocConsumer<CitySearchBloc, CitySearchState>(
-        listener: (context, state) {
-      if (state is CitySearchError) {
-        return Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text(state.errorMessage)));
-      }
-    }, builder: (context, state) {
-      if (state is CitySearchInitial) {
-        return Center(
-          child: Text('Enter city Name above'),
-        );
-      }
-      if (state is CitySearchLoading) {
-        return Loading(
-          indicator: BallPulseIndicator(),
-          color: Pallete.color4,
-        );
-      }
+//   @override
+//   Widget buildLeading(BuildContext context) {
+//     return IconButton(
+//         icon: Icon(Icons.arrow_back_ios),
+//         onPressed: () => Navigator.pop(context));
+//   }
 
-      if (state is CitySearchLoaded) {
-        return ListView.builder(itemBuilder: (context, index) {
-          return Card(child: Text(state.city.results[index].cityName));
-        });
-      }
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     return BlocConsumer<CitySearchBloc, CitySearchState>(
+//         listener: (context, state) {
+//       if (state is CitySearchError) {
+//         return Scaffold.of(context)
+//             .showSnackBar(SnackBar(content: Text(state.errorMessage)));
+//       }
+//     }, builder: (context, state) {
+//       if (state is CitySearchInitial) {
+//         return Center(
+//           child: Text('Enter city Name above'),
+//         );
+//       }
+//       if (state is CitySearchLoading) {
+//         return Loading(
+//           indicator: BallPulseIndicator(),
+//           color: Pallete.color4,
+//         );
+//       }
 
-      return Container();
-    });
-  }
+//       if (state is CitySearchLoaded) {
+//         return ListView.builder(itemBuilder: (context, index) {
+//           return Card(child: Text(state.city.results[index].cityName));
+//         });
+//       }
 
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Text(query);
-  }
-}
+//       return Container();
+//     });
+//   }
+
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     return Text(query);
+//   }
+// }

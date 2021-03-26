@@ -10,16 +10,16 @@ abstract class WeatherEvent extends Equatable {
 //NOTE: FetchWeatherByLocation event will be called at app launch
 
 //Fetch weather data by typed city
-class FetchedWeatherTypedCity extends WeatherEvent {
-  final String query;
-  FetchedWeatherTypedCity({
-    this.query,
+class FetchWeatherByCityId extends WeatherEvent {
+  final CityId cityId;
+  FetchWeatherByCityId({
+    this.cityId,
   });
 
   @override
-  String toString() => 'FetchedWeatherTypedCity(query: $query)';
+  String toString() => 'FetchedWeatherTypedCity(query: $cityId)';
   @override
-  List<Object> get props => [query];
+  List<Object> get props => [cityId];
 }
 
 //fecth weather data by user current location

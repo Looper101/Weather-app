@@ -45,7 +45,4 @@ class CityIdApi {
 
     return response.body;
   }
-
-  //TODO: Add getWeatherDataByQuery
-  //TODO:Add getWeatherDatabyLocation
 }

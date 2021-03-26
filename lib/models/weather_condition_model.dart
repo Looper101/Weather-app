@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class WeatherCondition {
-//get mesage
-//get icon
-
   static getMessage(int condition) {
     if (condition <= 300) {
       return 'ThunderStorm';
