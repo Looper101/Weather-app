@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:location/location.dart';
 import 'package:songlyrics/dataproviders/weather_provider.dart';
 import 'package:songlyrics/models/city_id.dart';
@@ -9,7 +7,7 @@ class WeatherRepository {
   WeatherApi _weatherApi;
 
   Future<Weather> fetchWeatherByCityId(CityId cityId) async {
-    var source = await _weatherApi.fectchWeatherByCityId(cityId);
+    var source = await _weatherApi.fetchWeatherByCityId(cityId);
 
     Weather weather = Weather.fromRawJson(source);
     return weather;

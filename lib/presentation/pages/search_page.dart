@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading/indicator/ball_pulse_indicator.dart';
 import 'package:loading/loading.dart';
+import 'package:songlyrics/logic/city_search_bloc/city_search_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/models/city_id.dart';
 
@@ -27,8 +28,8 @@ class _SearchPageState extends State<SearchPage> {
             icon: Icon(Icons.search),
             onPressed: () {
               print(_textEditingController.text);
-              BlocProvider.of<WeatherBloc>(context).add(
-                  FetchedWeatherTypedCity(query: _textEditingController.text));
+              BlocProvider.of<CitySearchBloc>(context)
+                  .add(CitySearched(query: _textEditingController.text));
             },
           )
         ],
@@ -41,21 +42,22 @@ class _SearchPageState extends State<SearchPage> {
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WeatherBloc, WeatherState>(
+    return BlocBuilder<CitySearchBloc, CitySearchState>(
       builder: (context, state) {
-        if (state is WeatherLoadError) {
-          return AlertDialog(
-            title: Text(state.errorMessage),
+        if (state is CitySearchLoading) {
+          return Loading(
+            indicator: BallPulseIndicator(),
           );
         }
-        if (state is WeatherLoaded) {
+        if (state is CitySearchLoaded) {
           var _itemCount = state.city.cities.length;
 
           return ListView.builder(
               itemCount: _itemCount,
               itemBuilder: (context, index) {
-                CityId item = state.city.cities[index];
-                return ResultItem(item);
+                CityId _city = state.city.cities[index];
+
+                return ResultItem(_city);
               });
         }
 
@@ -81,12 +83,12 @@ class ResultItem extends StatelessWidget {
   final CityId cityId;
   @override
   Widget build(BuildContext context) {
-    return Text(cityId.cityName);
+    return ListTile(
+      title: Text(cityId.cityName),
+      subtitle: Text(cityId.coordinate),
+      onTap: () {
+        //TODO:Add a (CityPicked) event to the citySearch Bloc
+      },
+    );
   }
-}
-
-Widget resultItem() {
-  return ListTile(
-    leading: Text('cityName'),
-  );
 }
