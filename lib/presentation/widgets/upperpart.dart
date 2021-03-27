@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 
-import 'package:songlyrics/models/weather_condition_model.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 import 'package:weather_icons/weather_icons.dart';
@@ -37,7 +36,7 @@ Column windDetails(WeatherLoaded state) {
             size: DeviceOrientation.longestSide * 0.035,
           ),
           SizedBox(width: DeviceOrientation.screenWidth * 0.025),
-          Text('${'state.weather.windSpeed.toInt()'} m/s',
+          Text('${state.weather.consolidatedWeather[0].windSpeed.toInt()} m/s',
               style: Pallete.textStyle.copyWith(fontSize: 17)),
         ],
       )
@@ -83,53 +82,56 @@ countryName(WeatherLoaded state) {
   //   ],
   // );
 
-  return Text('country name goes here');
+  return Text(
+    state.weather.cityName,
+    style: TextStyle(color: Colors.white, fontSize: 30),
+  );
 }
 
 Widget weatherDetailsContainer(WeatherLoaded state) {
-  // var cityName = state.weather.cityName;
-  // var temp = state.weather.temperature;
-  // var long = state.weather.longitude;
-  // var lat = state.weather.latitude;
-  // var country = state.weather.countryName;
-  // var condition = state.cityId.condition;
-  // return Container(
-  //   // height: DeviceOrientation.screenHeight * 0.5,
-  //   child: Column(
-  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //     crossAxisAlignment: CrossAxisAlignment.center,
-  //     children: [
-  //       Container(
-  //         height: DeviceOrientation.screenHeight * 0.3,
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //           children: [
-  //             BoxedIcon(
-  //               WeatherCondition.getIcon(condition),
-  //               color: Pallete.textColor,
-  //               size: DeviceOrientation.longestSide * 0.09,
-  //             ),
-  //             Text(
-  //               '${temp.toInt()}°',
-  //               style: TextStyle(
-  //                   color: Pallete.textColor,
-  //                   fontSize: DeviceOrientation.longestSide * 0.08,
-  //                   fontFamily: 'Bold',
-  //                   fontWeight: FontWeight.bold),
-  //             ),
-  //             Text(
-  //               WeatherCondition.getMessage(condition),
-  //               style: Pallete.textStyle.copyWith(fontSize: 17),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //       SizedBox(height: 20),
-  //     ],
-  //   ),
-  // );
+  var cityName = state.weather.cityName;
+  var temp = state.weather.consolidatedWeather[0].temp;
+  var stateName = state.weather.consolidatedWeather[0].weatherStateName;
+  return Container(
+    // height: DeviceOrientation.screenHeight * 0.5,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          height: DeviceOrientation.screenHeight * 0.3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              // BoxedIcon(
+              //     // WeatherCondition.getIcon(condition),
+              //     // color: Pallete.textColor,
+              //     // size: DeviceOrientation.longestSide * 0.09,
+              //     ),
+              Text(
+                '${temp.toInt()}°',
+                style: TextStyle(
+                    color: Pallete.textColor,
+                    fontSize: DeviceOrientation.longestSide * 0.08,
+                    fontFamily: 'Bold',
+                    fontWeight: FontWeight.bold),
+              ),
+              // Text(
+              //   WeatherCondition.getMessage(condition),
+              //   style: Pallete.textStyle.copyWith(fontSize: 17),
+              // ),
+            ],
+          ),
+        ),
+        SizedBox(height: 20),
+      ],
+    ),
+  );
 
-  return Text('weather container goes here');
+  return Text(
+    'weather container goes here',
+    style: TextStyle(color: Colors.white),
+  );
 }
 
 Widget searchTextFiled({Function(String) onChanged}) {

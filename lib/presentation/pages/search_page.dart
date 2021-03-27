@@ -45,8 +45,11 @@ class Body extends StatelessWidget {
     return BlocBuilder<CitySearchBloc, CitySearchState>(
       builder: (context, state) {
         if (state is CitySearchLoading) {
-          return Loading(
-            indicator: BallPulseIndicator(),
+          return Center(
+            child: Loading(
+              color: Colors.red,
+              indicator: BallPulseIndicator(),
+            ),
           );
         }
         if (state is CitySearchLoaded) {
@@ -57,17 +60,12 @@ class Body extends StatelessWidget {
               itemBuilder: (context, index) {
                 CityId _city = state.city.cities[index];
 
-                return ResultItem(_city);
+                return state.city.cities.isEmpty != null
+                    ? ResultItem(_city)
+                    : Center(
+                        child: Text('No city found'),
+                      );
               });
-        }
-
-        if (state is WeatherLoading) {
-          return Center(
-            child: Loading(
-              color: Colors.black,
-              indicator: BallPulseIndicator(),
-            ),
-          );
         }
 
         return Center(child: Text('Enter city name'));
@@ -83,12 +81,24 @@ class ResultItem extends StatelessWidget {
   final CityId cityId;
   @override
   Widget build(BuildContext context) {
+    var separatedString = separateString(cityId.coordinate);
+    var long = separatedString[0];
+    var lat = separatedString[1];
+
     return ListTile(
-      title: Text(cityId.cityName),
-      subtitle: Text(cityId.coordinate),
+      subtitle: Text('Long:$long Lat:$lat'),
+      title: Text(cityId.cityName.toString()),
       onTap: () {
-        //TODO:Add a (CityPicked) event to the citySearch Bloc
+        BlocProvider.of<CitySearchBloc>(context)
+            .add(CitySelected(cityId: cityId));
+        Navigator.pop(context);
       },
     );
   }
+}
+
+List<String> separateString(String str) {
+  List<String> splittedString = str.split(',');
+
+  return splittedString;
 }

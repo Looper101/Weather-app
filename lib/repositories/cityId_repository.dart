@@ -14,8 +14,8 @@ class CityIdRepository {
     return city;
   }
 
-  ///Fetch city-id data by using user current location-i.e Co-ordinates
-  Future<City> fetchWeatherByLocation(LocationData location) async {
+  ///Fetch cityId by User Location
+  Future<City> fetchCityIdByLocation(LocationData location) async {
     String rawResponse = await _cityIdApi.getCityIdByLocation(location);
 
     City city = City.fromJson(rawResponse);

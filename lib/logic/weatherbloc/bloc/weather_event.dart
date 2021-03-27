@@ -22,7 +22,7 @@ class FetchWeatherByCityId extends WeatherEvent {
   List<Object> get props => [cityId];
 }
 
-//fecth weather data by user current location
+//fetch weather data by user current location
 
 class FetchWeatherByLocation extends WeatherEvent {
   FetchWeatherByLocation();

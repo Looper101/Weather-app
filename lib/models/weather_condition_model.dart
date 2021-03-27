@@ -18,6 +18,7 @@ class WeatherCondition {
     }
   }
 
+  // ignore: missing_return
   static IconData getIcon(int condition) {
     if (condition <= 300) {
       return WeatherIcons.thunderstorm;

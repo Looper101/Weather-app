@@ -31,19 +31,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider(create: (context) => CityIdRepository()),
-        RepositoryProvider(create: (context) => WeatherRepository()),
-      ],
+    return RepositoryProvider(
+      create: (context) => CityIdRepository(),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => CitySearchBloc(
+                RepositoryProvider.of<CityIdRepository>(context)),
+          ),
+          BlocProvider(
               create: (context) => WeatherBloc(
-                    citySearchBloc: CitySearchBloc(
-                        RepositoryProvider.of<CityIdRepository>(context)),
-                    geolocatorRepository: GeolocatorRepository(),
-                  )..add(FetchWeatherByLocation())),
+                  cityIdRepository:
+                      RepositoryProvider.of<CityIdRepository>(context),
+                  citySearchBloc: context.read<CitySearchBloc>(),
+                  geolocatorRepository: GeolocatorRepository(),
+                  weatherRepository: WeatherRepository())
+                ..add(FetchWeatherByLocation())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

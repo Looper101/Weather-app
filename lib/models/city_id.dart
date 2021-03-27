@@ -33,7 +33,7 @@ class CityId {
   factory CityId.fromJson(Map<String, dynamic> json) {
     return CityId(
       distance: json['distance'],
-      cityName: json['cityname'],
+      cityName: json['title'],
       woeId: json['woeid'],
       coordinate: json['latt_long'],
     );

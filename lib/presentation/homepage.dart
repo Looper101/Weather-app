@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/presentation/pages/search_page.dart';
+import 'package:songlyrics/repositories/weather_repository.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 import 'widgets/upperpart.dart';
@@ -28,6 +29,14 @@ class _HomePageState extends State<HomePage>
     });
     super.initState();
   }
+
+  WeatherRepository weatherRepository = WeatherRepository();
+
+  // void testMethod() async {
+  //   Weather weatherxyz = await weatherRepository.fetchWeatherByLocationRepo(
+  //       longitude: -122.0, latitude: 33.0);
+  //   print('The test result is : ${weatherxyz.cityName}');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +64,7 @@ class _HomePageState extends State<HomePage>
                 if (state is WeatherLoadError) {
                   Scaffold.of(context).showSnackBar(SnackBar(
                     backgroundColor: Pallete.errorColor,
-                    content: Text(state.errorMessage),
+                    content: Text(state.errorMessage.toString()),
                   ));
                 }
               },
@@ -75,7 +84,13 @@ class _HomePageState extends State<HomePage>
                   );
                 }
                 if (state is WeatherLoadError) {
-                  return Center(child: Text(state.errorMessage));
+                  return Center(
+                      child: Text(
+                    state.errorMessage.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ));
                 }
                 return Expanded(
                   child: Container(

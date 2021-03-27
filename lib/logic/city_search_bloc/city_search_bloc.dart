@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:songlyrics/models/city_id.dart';
-import 'package:songlyrics/models/city_id.dart';
 import 'package:songlyrics/repositories/cityId_repository.dart';
 
 part 'city_search_event.dart';
@@ -34,9 +33,10 @@ class CitySearchBloc extends Bloc<CitySearchEvent, CitySearchState> {
     try {
       yield CitySearchLoading();
       City result = await cityIdRepository.getCityIdByCityTyped(event.query);
+      print(result);
       yield CitySearchLoaded(result);
     } catch (e) {
-      yield CitySearchError(errorMessage: e.toString);
+      yield CitySearchError(errorMessage: e);
     }
   }
 
@@ -44,8 +44,7 @@ class CitySearchBloc extends Bloc<CitySearchEvent, CitySearchState> {
     try {
       yield CityPicked(selectedCity: event.cityId);
     } catch (e) {
-
-      yield CitySearchError(errorMessage: e.toString);
+      yield CitySearchError(errorMessage: e);
     }
   }
 }

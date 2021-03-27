@@ -25,7 +25,7 @@ class WeatherLoaded extends WeatherState {
 }
 
 class WeatherLoadError extends WeatherState {
-  final String errorMessage;
+  final dynamic errorMessage;
   WeatherLoadError({
     this.errorMessage,
   });
