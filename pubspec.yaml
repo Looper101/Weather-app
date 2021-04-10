@@ -85,6 +85,14 @@ flutter:
       fonts:
         - asset: assets/fonts/NotoSansTC-Regular.otf
 
+    - family: Orb-Regular
+      fonts:
+        - asset: assets/fonts/Orbitron-Regular.ttf
+    - family: Orb-Bold
+      fonts:
+        - asset: assets/fonts/Orbitron-Bold.ttf
+
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

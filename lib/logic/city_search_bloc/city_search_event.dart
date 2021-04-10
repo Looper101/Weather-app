@@ -26,3 +26,10 @@ class CitySelected extends CitySearchEvent {
   @override
   List<Object> get props => [cityId];
 }
+
+class CityInvalidTyped extends CitySearchEvent {
+  final String cityTyped;
+  CityInvalidTyped({this.cityTyped});
+  @override
+  List<Object> get props => [cityTyped];
+}

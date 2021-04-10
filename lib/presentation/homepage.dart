@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/presentation/pages/search_page.dart';
 import 'package:songlyrics/repositories/weather_repository.dart';
-import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
+
+import 'pages/search_page.dart';
 import 'widgets/upperpart.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'homepage';
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -32,27 +33,37 @@ class _HomePageState extends State<HomePage>
 
   WeatherRepository weatherRepository = WeatherRepository();
 
-  // void testMethod() async {
-  //   Weather weatherxyz = await weatherRepository.fetchWeatherByLocationRepo(
-  //       longitude: -122.0, latitude: 33.0);
-  //   print('The test result is : ${weatherxyz.cityName}');
-  // }
-
   @override
   Widget build(BuildContext context) {
     DeviceOrientation deviceOrientation = DeviceOrientation();
     deviceOrientation.init(context);
     return Scaffold(
-      backgroundColor: Pallete.color2,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              Navigator.pushNamed(context, SearchPage.id);
-            },
-          )
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size(0.0, 56.0),
+        child: BlocBuilder<WeatherBloc, WeatherState>(
+          builder: (context, state) {
+            if (state is WeatherLoaded) {
+              return AppBar(
+                title: Text(
+                  'Forecaster',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: Colors.blueGrey),
+                ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      Navigator.pushNamed(context, SearchPage.id);
+                    },
+                  )
+                ],
+              );
+            }
+            return SizedBox.shrink();
+          },
+        ),
       ),
       body: Container(
         height: DeviceOrientation.screenHeight,
@@ -62,47 +73,81 @@ class _HomePageState extends State<HomePage>
             BlocConsumer<WeatherBloc, WeatherState>(
               listener: (context, state) {
                 if (state is WeatherLoadError) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Pallete.errorColor,
-                    content: Text(state.errorMessage.toString()),
-                  ));
+                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  //   backgroundColor: Theme.of(context).backgroundColor,
+                  //   content: Text('Check your connection'),
+                  // ));
+
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Not connected to internet',
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Check your internet settings'),
+                            ],
+                          ),
+                          actions: [
+                            IconButton(
+                              icon: Icon(Icons.refresh_outlined),
+                              onPressed: () =>
+                                  BlocProvider.of<WeatherBloc>(context)
+                                      .add(FetchWeatherByLocation()),
+                            )
+                          ],
+                        );
+                      });
                 }
               },
               builder: (context, state) {
                 if (state is WeatherLoaded) {
                   opacityController.forward();
                   return Expanded(
-                    child: upperWeatherContainer(state),
+                    child: upperWeatherContainer(state, context),
                   );
                 }
                 if (state is WeatherLoading) {
                   return Expanded(
                     child: Center(
                         child: SpinKitChasingDots(
-                      color: Pallete.errorColor,
+                      color: Theme.of(context).accentColor,
                     )),
                   );
                 }
-                if (state is WeatherLoadError) {
-                  return Center(
-                      child: Text(
-                    state.errorMessage.toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ));
-                }
+
                 return Expanded(
                   child: Container(
                     alignment: Alignment.center,
-                    child: RawMaterialButton(
-                        constraints:
-                            BoxConstraints.tightFor(width: 140, height: 70),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        fillColor: Pallete.errorColor,
-                        child: Text('Retry'),
-                        onPressed: () {}),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Failed to connect",
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                        SizedBox(height: DeviceOrientation.screenHeight * 0.03),
+                        RawMaterialButton(
+                          constraints:
+                              BoxConstraints.tightFor(width: 140, height: 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          fillColor: Theme.of(context).backgroundColor,
+                          child: Text(
+                            'Retry',
+                            style: TextStyle(color: Colors.white, fontSize: 25),
+                          ),
+                          onPressed: () => BlocProvider.of<WeatherBloc>(context)
+                              .add(FetchWeatherByLocation()),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

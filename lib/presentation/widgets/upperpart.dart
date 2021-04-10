@@ -1,31 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-upperWeatherContainer(WeatherLoaded state) {
+upperWeatherContainer(WeatherLoaded state, BuildContext context) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      countryName(state),
+      countryName(state, context),
       SizedBox(height: DeviceOrientation.screenHeight * 0.00),
-      weatherDetailsContainer(state),
-      windDetails(state),
+      weatherDetailsContainer(state, context),
+      windDetails(state, context),
     ],
   );
 }
 
-Column windDetails(WeatherLoaded state) {
+Widget windDetails(WeatherLoaded state, BuildContext context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(
         'Wind',
         style: Pallete.textStyle.copyWith(
-            fontSize: 17, fontWeight: FontWeight.w100, fontFamily: 'Bold'),
+            fontSize: DeviceOrientation.longestSide * 0.035,
+            // fontWeight: FontWeight.w100,
+            color: Theme.of(context).textTheme.headline1.color),
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,14 +38,17 @@ Column windDetails(WeatherLoaded state) {
           ),
           SizedBox(width: DeviceOrientation.screenWidth * 0.025),
           Text('${state.weather.consolidatedWeather[0].windSpeed.toInt()} m/s',
-              style: Pallete.textStyle.copyWith(fontSize: 17)),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2
+                  .copyWith(fontSize: DeviceOrientation.longestSide * 0.05)),
         ],
       )
     ],
   );
 }
 
-countryName(WeatherLoaded state) {
+countryName(WeatherLoaded state, BuildContext context) {
   // var cityName = state.weather.cityName;
   // // var temp = state.weather.temperature;
   // // var long = state.weather.longitude;
@@ -84,11 +88,13 @@ countryName(WeatherLoaded state) {
 
   return Text(
     state.weather.cityName,
-    style: TextStyle(color: Colors.white, fontSize: 30),
+    style: TextStyle(
+        color: Theme.of(context).textTheme.headline1.color,
+        fontSize: DeviceOrientation.longestSide * 0.04),
   );
 }
 
-Widget weatherDetailsContainer(WeatherLoaded state) {
+Widget weatherDetailsContainer(WeatherLoaded state, BuildContext context) {
   var cityName = state.weather.cityName;
   var temp = state.weather.consolidatedWeather[0].temp;
   var stateName = state.weather.consolidatedWeather[0].weatherStateName;
@@ -111,8 +117,8 @@ Widget weatherDetailsContainer(WeatherLoaded state) {
               Text(
                 '${temp.toInt()}°',
                 style: TextStyle(
-                    color: Pallete.textColor,
-                    fontSize: DeviceOrientation.longestSide * 0.08,
+                    color: Theme.of(context).textTheme.headline2.color,
+                    fontSize: DeviceOrientation.longestSide * 0.2,
                     fontFamily: 'Bold',
                     fontWeight: FontWeight.bold),
               ),
