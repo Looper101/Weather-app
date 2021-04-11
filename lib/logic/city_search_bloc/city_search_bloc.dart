@@ -45,7 +45,7 @@ class CitySearchBloc extends Bloc<CitySearchEvent, CitySearchState> {
     if (event is CitySelected) {
       yield* _mapCityPickedToState(event);
     }
-    if (event is CityInvalidTyped) {
+    if (event is InvalidCityTyped) {
       yield* _mapCityInvalidTypedToState(event);
     }
   }
@@ -70,7 +70,7 @@ class CitySearchBloc extends Bloc<CitySearchEvent, CitySearchState> {
   }
 
   Stream<CitySearchState> _mapCityInvalidTypedToState(
-      CityInvalidTyped event) async* {
+      InvalidCityTyped event) async* {
     yield CitySearchError(
         errorMessage: '${event.cityTyped} is not a valid city');
   }

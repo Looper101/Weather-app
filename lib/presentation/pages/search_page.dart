@@ -97,7 +97,7 @@ class Body extends StatelessWidget {
         if (state is CitySearchLoaded) {
           if (state.city.cities.length == 0) {
             BlocProvider.of<CitySearchBloc>(context)
-                .add(CityInvalidTyped(cityTyped: '${controller.text}'));
+                .add(InvalidCityTyped(cityTyped: '${controller.text}'));
           }
         }
 
@@ -136,7 +136,7 @@ class Body extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('sfksdfsgddjh'),
+                  title: Text('Can\'t connect to internet'),
                 );
               });
         }

@@ -73,36 +73,14 @@ class _HomePageState extends State<HomePage>
             BlocConsumer<WeatherBloc, WeatherState>(
               listener: (context, state) {
                 if (state is WeatherLoadError) {
-                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //   backgroundColor: Theme.of(context).backgroundColor,
-                  //   content: Text('Check your connection'),
-                  // ));
-
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text(
-                            'Not connected to internet',
-                            style: TextStyle(
-                                color: Theme.of(context).backgroundColor),
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Check your internet settings'),
-                            ],
-                          ),
-                          actions: [
-                            IconButton(
-                              icon: Icon(Icons.refresh_outlined),
-                              onPressed: () =>
-                                  BlocProvider.of<WeatherBloc>(context)
-                                      .add(FetchWeatherByLocation()),
-                            )
-                          ],
-                        );
-                      });
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                        backgroundColor: Theme.of(context).errorColor,
+                        content: Text('Check your connection'),
+                      ),
+                    );
                 }
               },
               builder: (context, state) {
@@ -127,6 +105,14 @@ class _HomePageState extends State<HomePage>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Image(
+                          image: AssetImage('assets/images/wifi_off1.png'),
+                          color: Colors.black26,
+                          height: DeviceOrientation.screenHeight * 0.07,
+                          width: DeviceOrientation.screenWidth * 0.2,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: DeviceOrientation.screenHeight * 0.07),
                         Text(
                           "Failed to connect",
                           style: TextStyle(color: Colors.black54),

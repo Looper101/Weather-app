@@ -27,9 +27,9 @@ class CitySelected extends CitySearchEvent {
   List<Object> get props => [cityId];
 }
 
-class CityInvalidTyped extends CitySearchEvent {
+class InvalidCityTyped extends CitySearchEvent {
   final String cityTyped;
-  CityInvalidTyped({this.cityTyped});
+  InvalidCityTyped({this.cityTyped});
   @override
   List<Object> get props => [cityTyped];
 }
