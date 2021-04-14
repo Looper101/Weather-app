@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
 import 'package:songlyrics/logic/city_search_bloc/city_search_bloc.dart';
-import 'package:songlyrics/models/city_id.dart';
 import 'package:songlyrics/models/weather.dart';
 import 'package:songlyrics/repositories/cityId_repository.dart';
 import 'package:songlyrics/repositories/geolocator_repository.dart';
@@ -26,8 +25,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       this.geolocatorRepository})
       : super(WeatherInitial()) {
     cityBlocSubscription = citySearchBloc.listen((state) {
-      if (state is CityPicked) {
-        add(FetchWeatherByCityId(cityId: state.selectedCity));
+      if (state is CityLoaded) {
+        add(FetchWeatherByCityTyped(cityTyped: state.cityTyped));
+      }
+      if (state is CitySearchError) {
+        add(FetchWeatherError(state.errorMessage));
       }
     });
   }
@@ -39,8 +41,12 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     if (event is FetchWeatherByLocation) {
       yield* _mapFetchWeatherByLocationToState();
     }
-    if (event is FetchWeatherByCityId) {
+
+    if (event is FetchWeatherByCityTyped) {
       yield* _mapFetchedWeatherTypedCity(event);
+    }
+    if (event is FetchWeatherError) {
+      yield WeatherLoadError(errorMessage: event.message);
     }
   }
 
@@ -48,13 +54,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       yield WeatherLoading();
       LocationData _location = await geolocatorRepository.getCurrentLocation();
-      // print('The weather location is ${_location.latitude}');
-      City cityResult = await cityIdRepository.fetchCityIdByLocation(_location);
-
-      var newCityId = cityResult.cities.first;
-      Weather result = await weatherRepository.fetchWeatherByCityId(newCityId);
-
-      print(result);
+      Weather result = await weatherRepository.fetchWeatherByLocationRepo(
+          latitude: _location.latitude, longitude: _location.longitude);
       yield WeatherLoaded(weather: result);
     } catch (e) {
       yield WeatherLoadError(errorMessage: e);
@@ -62,11 +63,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   }
 
   Stream<WeatherState> _mapFetchedWeatherTypedCity(
-      FetchWeatherByCityId event) async* {
+      FetchWeatherByCityTyped event) async* {
     yield WeatherLoading();
     try {
       Weather _weather =
-          await weatherRepository.fetchWeatherByCityId(event.cityId);
+          await weatherRepository.fetchWeatherByCityTyped(event.cityTyped);
 
       yield WeatherLoaded(weather: _weather);
     } catch (e) {

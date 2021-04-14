@@ -40,6 +40,8 @@ dependencies:
   location: ^3.2.4
   date_format: ^1.0.9
   loading: ^1.0.2
+  cached_network_image: ^2.5.0
+  shimmer: ^1.1.2
 
 dev_dependencies:
   flutter_test:

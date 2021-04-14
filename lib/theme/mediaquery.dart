@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class DeviceOrientation {
-  static double screenHeight;
-  static double screenWidth;
+class DeviceSize {
+  static double height;
+  static double width;
 
   static double longestSide;
   MediaQueryData mq;
@@ -10,8 +10,8 @@ class DeviceOrientation {
   init(BuildContext context) {
     mq = MediaQuery.of(context);
 
-    screenHeight = mq.size.height;
-    screenWidth = mq.size.width;
+    height = mq.size.height;
+    width = mq.size.width;
     longestSide = mq.size.longestSide;
   }
 }

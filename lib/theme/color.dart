@@ -12,7 +12,7 @@ class Pallete {
 
   static TextStyle textStyle = TextStyle(
       color: Pallete.textColor,
-      fontSize: DeviceOrientation.longestSide * 0.03,
+      fontSize: DeviceSize.longestSide * 0.03,
       fontFamily: 'Bold',
       fontWeight: FontWeight.w400);
 }

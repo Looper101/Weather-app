@@ -7,24 +7,14 @@ abstract class CitySearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CitySearched extends CitySearchEvent {
-  final String query;
-  CitySearched({
-    this.query,
-  });
+class CitySearching extends CitySearchEvent {
+  final String cityTyped;
+  CitySearching(
+    this.cityTyped,
+  );
 
   @override
-  List<Object> get props => [query];
-}
-
-class CitySelected extends CitySearchEvent {
-  final CityId cityId;
-  CitySelected({
-    this.cityId,
-  });
-
-  @override
-  List<Object> get props => [cityId];
+  List<Object> get props => [cityTyped];
 }
 
 class InvalidCityTyped extends CitySearchEvent {

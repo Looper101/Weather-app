@@ -11,44 +11,19 @@ class CitySearchInitial extends CitySearchState {}
 
 class CitySearchLoading extends CitySearchState {}
 
-class CitySearchLoaded extends CitySearchState {
-  final City city;
+class CityLoaded extends CitySearchState {
+  final String cityTyped;
 
-  CitySearchLoaded(this.city);
-
-  @override
-  String toString() => 'CitySearchLoaded(city: $city)';
+  CityLoaded(this.cityTyped);
 
   @override
-  List<Object> get props => [city];
+  String toString() => 'CitySearchSearch(city: $cityTyped)';
+
+  @override
+  List<Object> get props => [cityTyped];
 }
 
-class CitySearchSelected extends CitySearchState {
-  final CityId cityId;
-  CitySearchSelected({
-    this.cityId,
-  });
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is CitySearchSelected && other.cityId == cityId;
-  }
-
-  @override
-  int get hashCode => cityId.hashCode;
-}
-
-class CityPicked extends CitySearchState {
-  final CityId selectedCity;
-  CityPicked({
-    this.selectedCity,
-  });
-
-  @override
-  List<Object> get props => [selectedCity];
-}
+//
 
 class CitySearchError extends CitySearchState {
   final String errorMessage;

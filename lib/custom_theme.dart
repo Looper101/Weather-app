@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'theme/color.dart';
 
@@ -10,10 +11,17 @@ final darkTheme = ThemeData(
 );
 
 final lightTheme = ThemeData(
-    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: AppBarTheme(
+        brightness: Brightness.light,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        color: Colors.grey[500]),
+    primaryColorBrightness: Brightness.light,
+
+    // scaffoldBackgroundColor: Colors.white,
+    // brightness: Brightness.light,
     accentColor: Pallete.color3,
     primaryColor: Colors.white,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.grey,
     textTheme: TextTheme(
       bodyText2: TextStyle(fontFamily: "Orb-Regular"),
       bodyText1: TextStyle(fontFamily: "Orb-Bold"),
