@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.songlyrics">
+    package="com.example.poinq">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="songlyrics"
+        android:label="Poinq"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

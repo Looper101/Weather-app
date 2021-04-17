@@ -4,12 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/custom_theme.dart';
 import 'package:songlyrics/logic/city_search_bloc/city_search_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/repositories/cityId_repository.dart';
+import 'package:songlyrics/presentation/pages/home_page/homepage.dart';
+import 'package:songlyrics/presentation/pages/search_page/search_page.dart';
 import 'package:songlyrics/repositories/weather_repository.dart';
 import 'package:songlyrics/weather_observer.dart';
-
-import 'file:///C:/Users/Ope/AndroidStudioProjects/Weather-app-1/lib/presentation/pages/home_page/homepage.dart';
-import 'file:///C:/Users/Ope/AndroidStudioProjects/Weather-app-1/lib/presentation/pages/search_page/search_page.dart';
 
 import 'repositories/geolocator_repository.dart';
 
@@ -35,12 +33,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
             create: (context) => WeatherBloc(
-                cityIdRepository:
-                    RepositoryProvider.of<CityIdRepository>(context),
                 citySearchBloc: context.read<CitySearchBloc>(),
                 geolocatorRepository: GeolocatorRepository(),
                 weatherRepository: WeatherRepository())
-              ..add(FetchWeatherByLocation())),
+              ..add(
+                FetchWeatherByLocation(),
+              )),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

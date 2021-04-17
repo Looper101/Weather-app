@@ -1,4 +1,4 @@
-package com.example.songlyrics
+package com.example.poinq
 
 import io.flutter.embedding.android.FlutterActivity
 

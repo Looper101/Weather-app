@@ -17,11 +17,14 @@ weatherDetails(WeatherLoaded state, BuildContext context) {
             child: CachedNetworkImage(
               placeholder: (context, string) {
                 print("String unidentified $string");
-                return CircularProgressIndicator(strokeWidth: 10);
+                return CircularProgressIndicator(
+                  strokeWidth: 10,
+                );
               },
               imageUrl:
                   'https://openweathermap.org/img/wn/${state.weather.icon}@4x.png',
               fadeInDuration: Duration(milliseconds: 500),
+              placeholderFadeInDuration: Duration(milliseconds: 500),
               height: 100,
               width: 100,
             ),

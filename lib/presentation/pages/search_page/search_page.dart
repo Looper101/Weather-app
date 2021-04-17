@@ -30,7 +30,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void dispose() {
-    BlocProvider.of<CitySearchBloc>(context).dispose();
     _textEditingController
       ..clear()
       ..dispose();

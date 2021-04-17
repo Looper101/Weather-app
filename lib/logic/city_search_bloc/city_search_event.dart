@@ -15,11 +15,14 @@ class CitySearching extends CitySearchEvent {
 
   @override
   List<Object> get props => [cityTyped];
+
+  @override
+  String toString() => 'CitySearching(cityTyped: $cityTyped)';
 }
 
-class InvalidCityTyped extends CitySearchEvent {
-  final String cityTyped;
-  InvalidCityTyped({this.cityTyped});
-  @override
-  List<Object> get props => [cityTyped];
-}
+// class InvalidCityTyped extends CitySearchEvent {
+//   final String cityTyped;
+//   InvalidCityTyped({this.cityTyped});
+//   @override
+//   List<Object> get props => [cityTyped];
+// }

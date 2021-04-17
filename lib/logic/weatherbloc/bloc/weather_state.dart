@@ -36,3 +36,10 @@ class WeatherLoadError extends WeatherState {
   @override
   String toString() => 'WeatherLoadError(errorMessage: $errorMessage)';
 }
+
+class WeatherLoadCityException extends WeatherState {
+  final String message;
+  WeatherLoadCityException(this.message);
+  @override
+  List<Object> get props => [message];
+}

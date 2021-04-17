@@ -1,13 +1,16 @@
 part of 'city_search_bloc.dart';
 
-abstract class CitySearchState extends Equatable {
+abstract class CitySearchState {
   const CitySearchState();
-
-  @override
-  List<Object> get props => [];
+  // @override
+  // List<Object> get props => [];
 }
 
-class CitySearchInitial extends CitySearchState {}
+class CitySearchInitial extends CitySearchState {
+  const CitySearchInitial();
+  // @override
+  // List<Object> get props => [];
+}
 
 class CitySearchLoading extends CitySearchState {}
 
@@ -15,12 +18,12 @@ class CityLoaded extends CitySearchState {
   final String cityTyped;
 
   CityLoaded(this.cityTyped);
-
-  @override
-  String toString() => 'CitySearchSearch(city: $cityTyped)';
-
-  @override
-  List<Object> get props => [cityTyped];
+  //
+  // @override
+  // List<Object> get props => [cityTyped];
+  //
+  // @override
+  // String toString() => 'CitySearchSearch(city: $cityTyped)';
 }
 
 //

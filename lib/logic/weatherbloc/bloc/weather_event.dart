@@ -7,8 +7,6 @@ abstract class WeatherEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//NOTE: FetchWeatherByLocation event will be called at app launch
-
 //Fetch weather data by typed city
 class FetchWeatherByCityTyped extends WeatherEvent {
   final String cityTyped;
@@ -18,6 +16,7 @@ class FetchWeatherByCityTyped extends WeatherEvent {
 
   @override
   String toString() => 'FetchedWeatherTypedCity(query: $cityTyped)';
+
   @override
   List<Object> get props => [cityTyped];
 }
@@ -26,12 +25,25 @@ class FetchWeatherByCityTyped extends WeatherEvent {
 
 class FetchWeatherByLocation extends WeatherEvent {
   FetchWeatherByLocation();
+
+  @override
+  List<Object> get props => [];
 }
 
 //notify bloc of an error from other bloc being subscribed to
 class FetchWeatherError extends WeatherEvent {
   final String message;
   FetchWeatherError(this.message);
+
   @override
   List<Object> get props => [message];
+}
+
+///event for name of city typed by user--
+class CitySearchQuery extends WeatherEvent {
+  final String query;
+  CitySearchQuery({this.query});
+
+  @override
+  List<Object> get props => [query];
 }

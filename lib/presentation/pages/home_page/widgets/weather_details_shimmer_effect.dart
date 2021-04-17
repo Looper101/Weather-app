@@ -12,6 +12,7 @@ weatherDetailsLoadingFX() {
         left: DeviceSize.width * 0.05,
         child: CircularProgressIndicator(
           strokeWidth: 10.0,
+          backgroundColor: Colors.grey[400],
         ),
       ),
       Positioned(
