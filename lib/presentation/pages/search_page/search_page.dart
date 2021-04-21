@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/logic/city_search_bloc/city_search_bloc.dart';
-import 'package:songlyrics/models/city_id.dart';
+import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 
 class SearchPage extends StatefulWidget {
@@ -28,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
   }
 
+  FocusNode _focusNode = FocusNode();
   @override
   void dispose() {
     _textEditingController
@@ -44,6 +44,8 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.color,
         title: TextField(
+          focusNode: _focusNode,
+          autofocus: true,
           style: Theme.of(context)
               .textTheme
               .headline2
@@ -56,9 +58,10 @@ class _SearchPageState extends State<SearchPage> {
             icon: Icon(Icons.search),
             onPressed: () {
               if (_textEditingController.text.length > 0) {
-                print(_textEditingController.text);
-                BlocProvider.of<CitySearchBloc>(context)
-                    .add(CitySearching(_textEditingController.text));
+                _focusNode.unfocus();
+
+                BlocProvider.of<WeatherBloc>(context)
+                    .add(CitySearchQuery(query: _textEditingController.text));
               }
             },
           )
@@ -80,13 +83,11 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CitySearchBloc, CitySearchState>(
+    return BlocConsumer<WeatherBloc, WeatherState>(
       listener: (context, state) {
-        if (state is CityLoaded) {
+        if (state is CitySearched) {
           Navigator.pop(context);
         }
-
-        if (state is CitySearchError) {}
       },
       builder: (context, state) {
         return Center(
@@ -99,33 +100,33 @@ class Body extends StatelessWidget {
     );
   }
 }
-
-class ResultItem extends StatelessWidget {
-  const ResultItem(
-    this.cityId,
-  );
-  final CityId cityId;
-  @override
-  Widget build(BuildContext context) {
-    var separatedString = separateString(cityId.coordinate);
-    var long = separatedString[0];
-    var lat = separatedString[1];
-
-    return ListTile(
-      tileColor: Colors.white,
-      subtitle: Text('Long:$long Lat:$lat'),
-      title: Text(cityId.cityName.toString()),
-      onTap: () {
-        // BlocProvider.of<CitySearchBloc>(context)
-        //     .add(CitySelected(cityId: cityId));
-        // Navigator.pop(context);
-      },
-    );
-  }
-}
-
-List<String> separateString(String str) {
-  List<String> splittedString = str.split(',');
-
-  return splittedString;
-}
+//
+// class ResultItem extends StatelessWidget {
+//   const ResultItem(
+//     this.cityId,
+//   );
+//   final CityId cityId;
+//   @override
+//   Widget build(BuildContext context) {
+//     var separatedString = separateString(cityId.coordinate);
+//     var long = separatedString[0];
+//     var lat = separatedString[1];
+//
+//     return ListTile(
+//       tileColor: Colors.white,
+//       subtitle: Text('Long:$long Lat:$lat'),
+//       title: Text(cityId.cityName.toString()),
+//       onTap: () {
+//         // BlocProvider.of<CitySearchBloc>(context)
+//         //     .add(CitySelected(cityId: cityId));
+//         // Navigator.pop(context);
+//       },
+//     );
+//   }
+// }
+//
+// List<String> separateString(String str) {
+//   List<String> splittedString = str.split(',');
+//
+//   return splittedString;
+// }

@@ -7,13 +7,13 @@ class WeatherRepository {
 
   Future<Weather> fetchWeatherByCityTyped(String cityName) async {
     var source = await _weatherApi.fetchWeatherByCityId(cityName);
-    print("status code of the request is: ${source.statusCode} ");
+
     if (source.statusCode == 200) {
       Weather weather = Weather.fromRawJson(source.body);
-      print('Returning the weather coz the city exist');
+
       return weather;
     } else if (source.statusCode == 400 || source.statusCode == 404) {
-      throw CityException(errorMessage: 'City not found');
+      throw CityException(errorMessage: '$cityName not found');
     }
   }
 
@@ -25,5 +25,13 @@ class WeatherRepository {
     Weather weather = Weather.fromRawJson(source.body);
 
     return weather;
+  }
+
+  int stringLengthChecker(String value) {
+    if (value.length > 5) {
+      return 6;
+    } else {
+      return 5;
+    }
   }
 }

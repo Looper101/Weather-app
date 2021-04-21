@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/custom_theme.dart';
-import 'package:songlyrics/logic/city_search_bloc/city_search_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/presentation/pages/home_page/homepage.dart';
 import 'package:songlyrics/presentation/pages/search_page/search_page.dart';
@@ -29,11 +28,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CitySearchBloc(),
-        ),
-        BlocProvider(
             create: (context) => WeatherBloc(
-                citySearchBloc: context.read<CitySearchBloc>(),
                 geolocatorRepository: GeolocatorRepository(),
                 weatherRepository: WeatherRepository())
               ..add(

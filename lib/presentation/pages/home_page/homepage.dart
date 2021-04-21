@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
@@ -41,12 +42,10 @@ class _HomePageState extends State<HomePage> {
                 ..showSnackBar(
                   SnackBar(
                     behavior: SnackBarBehavior.floating,
-                    backgroundColor: Theme.of(context).errorColor,
-                    content: Text(
+                    backgroundColor: Colors.black,
+                    content: AutoSizeText(
                       '${state.errorMessage}',
-                      style: TextStyle(
-                          fontSize: DeviceSize.longestSide * 0.025,
-                          color: Colors.white),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 );
@@ -64,31 +63,57 @@ class _HomePageState extends State<HomePage> {
               return Stack(
                 children: [
                   Positioned(
-                      child: InkResponse(
-                    onTap: () {
-                      BlocProvider.of<WeatherBloc>(context)
-                          .add(FetchWeatherByLocation());
-                    },
-                    child: Card(
-                      margin: EdgeInsets.only(
-                          top: DeviceSize.height * 0.03,
-                          left: DeviceSize.width * 0.05),
-                      elevation: 0.5,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
+                    top: DeviceSize.height * 0.01,
+                    left: DeviceSize.width * 0.05,
+                    child: GestureDetector(
+                      onTap: () => BlocProvider.of<WeatherBloc>(context)
+                          .add(FetchWeatherByLocation()),
+                      child: Container(
+                        // height: DeviceSize.height * 0.09,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: RotatedBox(
+                          quarterTurns: 2,
+                          child: Icon(
                             Icons.navigation_sharp,
-                            color: Colors.red,
-                            size: DeviceSize.longestSide * 0.06,
+                            size: DeviceSize.longestSide * 0.03,
+                            color: Theme.of(context).errorColor,
                           ),
-                          Text('Get my weather'),
-                        ],
+                        ),
                       ),
                     ),
-                  )),
+                  ),
+                  Positioned(
+                    top: DeviceSize.height * 0.03,
+                    left: DeviceSize.width * 0.16,
+                    child: Container(
+                      height: DeviceSize.height * 0.03,
+                      padding: EdgeInsets.symmetric(
+                          horizontal: DeviceSize.width * 0.02),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          )),
+                      child: Text(
+                        'Fetch Weather for my Location',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontFamily: 'Bold'),
+                      ),
+                    ),
+                  ),
                   Center(
-                    child: Text('City can\'t be found)'),
+                    child: Text(
+                      'City can\'t be found !',
+                      style: TextStyle(
+                          fontFamily: 'Bold',
+                          fontSize: DeviceSize.longestSide * 0.025),
+                    ),
                   ),
                 ],
               );
@@ -120,51 +145,22 @@ class _HomePageState extends State<HomePage> {
               FlatButton(
                 color: Colors.blueGrey[200],
                 onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: DeviceSize.height * 0.35,
-                          width: double.infinity,
-                          color: Colors.white,
-                          child: Padding(
-                            padding:
-                                EdgeInsets.only(top: 20, left: 10, right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 30,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Column(
-                                      children: [
-                                        Text('Lawal Opeyemi Noah'),
-                                        Text('Software Developer'),
-                                      ],
-                                    )
-                                  ],
-                                ),
-
-                                ///////
-                                SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Text('Links'),
-                                    Container(
-                                      height: 3,
-                                      width: double.infinity,
-                                      color: Colors.black45,
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      });
+                  showAboutDialog(context: context, children: [
+                    Text(
+                      'Lorem ipsum, or lipsum as it is sometimes known,'
+                      ' is dummy'
+                      ' text used in laying out print, graphic or web designs.'
+                      ' The passage is attributed to an unknown typesetter in'
+                      ' the 15th century who is thought to have scrambled '
+                      'parts of .',
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.add),
+                        Text('@Devlonoah let me know')
+                      ],
+                    )
+                  ]);
                 },
                 child: Text('About Developer',
                     style: Theme.of(context).textTheme.headline5.copyWith(
@@ -178,40 +174,126 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildErrorMessage() {
+  Container buildContent() {
     return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image(
-            image: AssetImage('assets/images/wifi_off1.png'),
-            color: Colors.black26,
-            height: DeviceSize.height * 0.07,
-            width: DeviceSize.width * 0.2,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(height: DeviceSize.height * 0.07),
-          Text(
-            "Failed to connect",
-            style: TextStyle(color: Colors.black54),
-          ),
-          SizedBox(height: DeviceSize.height * 0.03),
-          RawMaterialButton(
-            constraints: BoxConstraints.tightFor(width: 140, height: 50),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
+      height: DeviceSize.height * 0.35,
+      width: DeviceSize.width * 0.8,
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                ),
+                SizedBox(width: 10),
+                Column(
+                  children: [
+                    Text('Lawal Opeyemi Noah'),
+                    Text('Software Developer'),
+                  ],
+                )
+              ],
             ),
-            fillColor: Theme.of(context).backgroundColor,
-            child: Text(
-              'Retry',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => BlocProvider.of<WeatherBloc>(context)
-                .add(FetchWeatherByLocation()),
-          ),
-        ],
+
+            ///////
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Text('Links'),
+                Container(
+                  height: 3,
+                  width: double.infinity,
+                  color: Colors.black45,
+                )
+              ],
+            )
+          ],
+        ),
       ),
+    );
+  }
+
+  _buildErrorMessage() {
+    return Stack(
+      children: [
+        Positioned(
+          top: DeviceSize.height * 0.05,
+          left: DeviceSize.width * 0.05,
+          child: Container(
+            // height: DeviceSize.height * 0.09,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: RotatedBox(
+              quarterTurns: 2,
+              child: Icon(
+                Icons.navigation_sharp,
+                size: DeviceSize.longestSide * 0.03,
+                color: Theme.of(context).errorColor,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: DeviceSize.height * 0.07,
+          left: DeviceSize.width * 0.16,
+          child: Container(
+            height: DeviceSize.height * 0.03,
+            padding: EdgeInsets.symmetric(horizontal: DeviceSize.width * 0.02),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                )),
+            child: Text(
+              'Fetch Weather for my Location',
+              style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Bold'),
+            ),
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage('assets/images/wifi_off1.png'),
+                color: Colors.black26,
+                height: DeviceSize.height * 0.07,
+                width: DeviceSize.width * 0.2,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(height: DeviceSize.height * 0.07),
+              Text(
+                "Failed to connect",
+                style: TextStyle(color: Colors.black54),
+              ),
+              SizedBox(height: DeviceSize.height * 0.03),
+              RawMaterialButton(
+                constraints: BoxConstraints.tightFor(width: 140, height: 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                fillColor: Theme.of(context).backgroundColor,
+                child: Text(
+                  'Retry',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => BlocProvider.of<WeatherBloc>(context)
+                    .add(FetchWeatherByLocation()),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

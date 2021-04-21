@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/theme/color.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
@@ -10,6 +11,54 @@ weatherDetails(WeatherLoaded state, BuildContext context) {
   print('rebuild check');
   return Stack(
     children: [
+      Positioned(
+        top: DeviceSize.height * 0.01,
+        left: DeviceSize.width * 0.05,
+        child: GestureDetector(
+          onTap: () {
+            BlocProvider.of<WeatherBloc>(context).add(FetchWeatherByLocation());
+          },
+          child: Container(
+            // height: DeviceSize.height * 0.09,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+            ),
+            child: RotatedBox(
+              quarterTurns: 2,
+              child: Icon(
+                Icons.navigation_sharp,
+                size: DeviceSize.longestSide * 0.03,
+                color: Theme.of(context).errorColor,
+              ),
+            ),
+          ),
+        ),
+      ),
+      Positioned(
+        top: DeviceSize.height * 0.03,
+        left: DeviceSize.width * 0.16,
+        child: Container(
+          height: DeviceSize.height * 0.03,
+          padding: EdgeInsets.symmetric(horizontal: DeviceSize.width * 0.02),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+              )),
+          child: Text(
+            'Fetch Weather for my Location',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Bold',
+                color: Colors.black54,
+                letterSpacing: 1.0),
+          ),
+        ),
+      ),
       Positioned(
           top: DeviceSize.height * 0.1,
           right: DeviceSize.width * 0.03,
@@ -99,7 +148,7 @@ Widget weatherDetailsContainer(WeatherLoaded state, BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                '${runtimeDetector(temp)}°',
+                '${runtimeDetector(temp)}°c',
                 style: TextStyle(
                     color: Theme.of(context).textTheme.headline2.color,
                     fontSize: DeviceSize.longestSide * 0.2,
