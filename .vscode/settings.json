@@ -1,5 +1,5 @@
 {
     "editor.formatOnSave": true,
-    "editor.fontFamily": "fira code regular",
-    "editor.fontSize": 15
+    "editor.fontFamily": "SF Mono Regular",
+    "editor.fontLigatures": true
 }

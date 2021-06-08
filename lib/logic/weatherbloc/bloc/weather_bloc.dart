@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:location/location.dart';
 import 'package:songlyrics/models/custom_exception/city_exception.dart';
 import 'package:songlyrics/models/weather.dart';
@@ -14,13 +13,17 @@ part 'weather_event.dart';
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherRepository weatherRepository;
-  // final CitySearchBloc citySearchBloc;
+  WeatherRepository _weatherRepository;
 
-  GeolocatorRepository geolocatorRepository;
+  GeolocatorRepository _geolocatorRepository;
 
-  WeatherBloc({@required this.geolocatorRepository, this.weatherRepository})
-      : super(WeatherInitial());
+  WeatherBloc(
+      {GeolocatorRepository geolocatorRepository,
+      WeatherRepository weatherRepository})
+      : super(WeatherInitial()) {
+    _weatherRepository = weatherRepository ?? WeatherRepository();
+    _geolocatorRepository = geolocatorRepository ?? GeolocatorRepository();
+  }
 
   StreamSubscription cityBlocSubscription;
   @override
@@ -41,10 +44,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       yield CitySearched();
       yield WeatherLoading();
-      var result = await weatherRepository.fetchWeatherByCityTyped(event.query);
+      var result =
+          await _weatherRepository.fetchWeatherByCityTyped(event.query);
       yield WeatherLoaded(weather: result);
+    // ignore: unused_catch_clause
     } on SocketException catch (e) {
       yield WeatherLoadError(errorMessage: 'Check your connection');
+      // ignore: unused_catch_clause
     } on CityException catch (e) {
       yield WeatherLoadCityException('${event.query} not found');
     }
@@ -53,8 +59,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Stream<WeatherState> _mapFetchWeatherByLocationToState() async* {
     try {
       yield WeatherLoading();
-      LocationData _location = await geolocatorRepository.getCurrentLocation();
-      Weather result = await weatherRepository.fetchWeatherByLocationRepo(
+      LocationData _location = await _geolocatorRepository.getCurrentLocation();
+      Weather result = await _weatherRepository.fetchWeatherByLocationRepo(
           latitude: _location.latitude, longitude: _location.longitude);
       yield WeatherLoaded(weather: result);
     } catch (e) {

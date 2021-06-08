@@ -145,22 +145,16 @@ class _HomePageState extends State<HomePage> {
               FlatButton(
                 color: Colors.blueGrey[200],
                 onPressed: () {
-                  showAboutDialog(context: context, children: [
-                    Text(
-                      'Lorem ipsum, or lipsum as it is sometimes known,'
-                      ' is dummy'
-                      ' text used in laying out print, graphic or web designs.'
-                      ' The passage is attributed to an unknown typesetter in'
-                      ' the 15th century who is thought to have scrambled '
-                      'parts of .',
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.add),
-                        Text('@Devlonoah let me know')
-                      ],
-                    )
-                  ]);
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AboutDialog(
+                          applicationName: 'Poinq',
+                          applicationVersion: 'version 1.0.0',
+                          //TODO: add app icon here
+                          applicationIcon: Text('To e added soon'),
+                        );
+                      });
                 },
                 child: Text('About Developer',
                     style: Theme.of(context).textTheme.headline5.copyWith(
@@ -169,49 +163,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Container buildContent() {
-    return Container(
-      height: DeviceSize.height * 0.35,
-      width: DeviceSize.width * 0.8,
-      color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                ),
-                SizedBox(width: 10),
-                Column(
-                  children: [
-                    Text('Lawal Opeyemi Noah'),
-                    Text('Software Developer'),
-                  ],
-                )
-              ],
-            ),
-
-            ///////
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Text('Links'),
-                Container(
-                  height: 3,
-                  width: double.infinity,
-                  color: Colors.black45,
-                )
-              ],
-            )
-          ],
         ),
       ),
     );

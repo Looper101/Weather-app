@@ -19,7 +19,6 @@ weatherDetails(WeatherLoaded state, BuildContext context) {
             BlocProvider.of<WeatherBloc>(context).add(FetchWeatherByLocation());
           },
           child: Container(
-            // height: DeviceSize.height * 0.09,
             alignment: Alignment.center,
             padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
             decoration: BoxDecoration(
@@ -44,7 +43,7 @@ weatherDetails(WeatherLoaded state, BuildContext context) {
           height: DeviceSize.height * 0.03,
           padding: EdgeInsets.symmetric(horizontal: DeviceSize.width * 0.02),
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.white30,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10),
                 bottomRight: Radius.circular(10),
@@ -65,9 +64,9 @@ weatherDetails(WeatherLoaded state, BuildContext context) {
           child: Container(
             child: CachedNetworkImage(
               placeholder: (context, string) {
-                print("String unidentified $string");
                 return CircularProgressIndicator(
                   strokeWidth: 10,
+                  color: Colors.grey,
                 );
               },
               imageUrl:

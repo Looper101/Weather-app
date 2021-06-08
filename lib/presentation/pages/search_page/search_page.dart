@@ -21,12 +21,6 @@ class _SearchPageState extends State<SearchPage> {
     print(isEmpty);
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   FocusNode _focusNode = FocusNode();
   @override
   void dispose() {
@@ -50,7 +44,8 @@ class _SearchPageState extends State<SearchPage> {
               .textTheme
               .headline2
               .copyWith(fontSize: DeviceSize.longestSide * 0.03),
-          decoration: InputDecoration(fillColor: Colors.white, filled: true),
+          decoration: InputDecoration(
+              fillColor: Colors.white, filled: true, border: InputBorder.none),
           controller: _textEditingController,
         ),
         actions: [

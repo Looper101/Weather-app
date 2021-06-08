@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'theme/color.dart';
 
-//TODO: Implement theme switch
+
 
 final darkTheme = ThemeData(
   scaffoldBackgroundColor: Colors.black,

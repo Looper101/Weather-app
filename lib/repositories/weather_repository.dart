@@ -5,6 +5,7 @@ import 'package:songlyrics/models/weather.dart';
 class WeatherRepository {
   WeatherApi _weatherApi = WeatherApi();
 
+  // ignore: missing_return
   Future<Weather> fetchWeatherByCityTyped(String cityName) async {
     var source = await _weatherApi.fetchWeatherByCityId(cityName);
 
