@@ -1,10 +1,9 @@
 import 'package:location/location.dart';
+import 'package:songlyrics/datasource/city_api.dart';
 import 'package:songlyrics/models/city_id.dart';
 
-import '../dataproviders/cityid_provider.dart';
-
 class CityIdRepository {
-  CityIdApi _cityIdApi = CityIdApi();
+  CityApi _cityIdApi = CityApi();
 
   /// Fetch city-id data by the user typed city name ex-. London
   Future<City> getCityIdByCityTyped(String query) async {

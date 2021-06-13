@@ -7,7 +7,7 @@ abstract class WeatherEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//Fetch weather data by typed city
+///Fetch weather data by typed city
 class FetchWeatherByCityTyped extends WeatherEvent {
   final String cityTyped;
   FetchWeatherByCityTyped({
@@ -39,7 +39,7 @@ class FetchWeatherError extends WeatherEvent {
   List<Object> get props => [message];
 }
 
-///event for name of city typed by user--
+///Event for name of city typed by user--
 class CitySearchQuery extends WeatherEvent {
   final String query;
   CitySearchQuery({this.query});

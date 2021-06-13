@@ -15,7 +15,34 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation animation;
+  final _animDuration = Duration(seconds: 2);
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(vsync: this, duration: _animDuration);
+    animation = Tween<double>(begin: 0, end: 200).animate(controller);
+
+    controller.addStatusListener((status) async {
+      await controlAnimation(status);
+    });
+  }
+
+  Future<void> controlAnimation(AnimationStatus status) async {
+    if (status == AnimationStatus.completed) {
+      //delay/wait for 3 seconds
+      await Future.delayed(_animDuration).then((value) => controller.reverse());
+      //then retract
+      //and at half way fade out
+
+      //! Multiple animation to be  binded together
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DeviceSize deviceOrientation = DeviceSize();

@@ -1,5 +1,5 @@
-import 'package:songlyrics/dataproviders/weather_provider.dart';
-import 'package:songlyrics/models/custom_exception/city_exception.dart';
+import 'package:songlyrics/datasource/weather_provider.dart';
+import 'package:songlyrics/error/exception/city_exception.dart';
 import 'package:songlyrics/models/weather.dart';
 
 class WeatherRepository {
