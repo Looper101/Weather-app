@@ -2,4 +2,4 @@
  
 A weather app 
 
-A fully functional weather app😎
+A fully functional weather app

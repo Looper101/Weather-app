@@ -6,6 +6,7 @@ import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details.
 import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details_shimmer_effect.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
 
+import 'widgets/show_on_error.dart';
 import 'widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage>
   }
 
   Future<void> controlAnimation(AnimationStatus status) async {
-    if (status == AnimationStatus.completed) {
+    if (status != AnimationStatus.completed) {
       //delay/wait for 3 seconds
       await Future.delayed(_animDuration).then((value) => controller.reverse());
       //then retract
@@ -171,72 +172,6 @@ class _HomePageState extends State<HomePage>
                 onPressed: () => bloc.add(FetchWeatherByLocation()),
               ),
             ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ShowOnError extends StatelessWidget {
-  const ShowOnError({
-    Key key,
-    @required WeatherBloc bloc,
-  })  : _bloc = bloc,
-        super(key: key);
-
-  final WeatherBloc _bloc;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          top: DeviceSize.height * 0.01,
-          left: DeviceSize.width * 0.05,
-          child: GestureDetector(
-            onTap: () => _bloc.add(FetchWeatherByLocation()),
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-              ),
-              child: RotatedBox(
-                quarterTurns: 2,
-                child: Icon(
-                  Icons.navigation_sharp,
-                  size: DeviceSize.longestSide * 0.03,
-                  color: Theme.of(context).errorColor,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: DeviceSize.height * 0.03,
-          left: DeviceSize.width * 0.16,
-          child: Container(
-            height: DeviceSize.height * 0.03,
-            padding: EdgeInsets.symmetric(horizontal: DeviceSize.width * 0.02),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                )),
-            child: Text(
-              'Fetch Weather for my Location',
-              style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Bold'),
-            ),
-          ),
-        ),
-        Center(
-          child: Text(
-            'City can\'t be found !',
-            style: TextStyle(
-                fontFamily: 'Bold', fontSize: DeviceSize.longestSide * 0.025),
           ),
         ),
       ],
