@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage>
           top: DeviceSize.height * 0.05,
           left: DeviceSize.width * 0.05,
           child: Container(
-            // height: DeviceSize.height * 0.09,
             alignment: Alignment.center,
             padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
             decoration: BoxDecoration(
@@ -198,7 +197,6 @@ class ShowOnError extends StatelessWidget {
           child: GestureDetector(
             onTap: () => _bloc.add(FetchWeatherByLocation()),
             child: Container(
-              // height: DeviceSize.height * 0.09,
               alignment: Alignment.center,
               padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
               decoration: BoxDecoration(

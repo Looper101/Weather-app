@@ -87,33 +87,3 @@ class Body extends StatelessWidget {
     );
   }
 }
-//
-// class ResultItem extends StatelessWidget {
-//   const ResultItem(
-//     this.cityId,
-//   );
-//   final CityId cityId;
-//   @override
-//   Widget build(BuildContext context) {
-//     var separatedString = separateString(cityId.coordinate);
-//     var long = separatedString[0];
-//     var lat = separatedString[1];
-//
-//     return ListTile(
-//       tileColor: Colors.white,
-//       subtitle: Text('Long:$long Lat:$lat'),
-//       title: Text(cityId.cityName.toString()),
-//       onTap: () {
-//         // BlocProvider.of<CitySearchBloc>(context)
-//         //     .add(CitySelected(cityId: cityId));
-//         // Navigator.pop(context);
-//       },
-//     );
-//   }
-// }
-//
-// List<String> separateString(String str) {
-//   List<String> splittedString = str.split(',');
-//
-//   return splittedString;
-// }

@@ -20,7 +20,7 @@ Container developerDetails() {
               Column(
                 children: [
                   Text('Lawal Opeyemi Noah'),
-                  Text('Software Developer'),
+                  Text('Mobile App Developer'),
                   Row(
                     children: [
                       Text('Twitter link:'),
