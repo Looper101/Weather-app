@@ -19,12 +19,7 @@ class Weather {
         icon: json['weather'][0]['icon']);
   }
 
-  Weather copyWith({Weather weather
-      // String cityName,
-      // dynamic temperature,
-      // dynamic windSpeed,
-      // String icon,
-      }) {
+  Weather copyWith({Weather weather}) {
     return Weather(
       cityName: weather.cityName ?? this.cityName,
       temperature: weather.temperature ?? this.temperature,

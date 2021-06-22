@@ -14,13 +14,6 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController _textEditingController = TextEditingController();
   GlobalKey _scaffoldKey = GlobalKey();
 
-  bool isEmpty = false;
-
-  void checkValueLength() {
-    isEmpty = _textEditingController.text.length > 0;
-    print(isEmpty);
-  }
-
   FocusNode _focusNode = FocusNode();
   @override
   void dispose() {
@@ -32,6 +25,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _bloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
@@ -54,9 +48,7 @@ class _SearchPageState extends State<SearchPage> {
             onPressed: () {
               if (_textEditingController.text.length > 0) {
                 _focusNode.unfocus();
-
-                BlocProvider.of<WeatherBloc>(context)
-                    .add(CitySearchQuery(query: _textEditingController.text));
+                _bloc.add(CitySearchQuery(query: _textEditingController.text));
               }
             },
           )
@@ -95,33 +87,3 @@ class Body extends StatelessWidget {
     );
   }
 }
-//
-// class ResultItem extends StatelessWidget {
-//   const ResultItem(
-//     this.cityId,
-//   );
-//   final CityId cityId;
-//   @override
-//   Widget build(BuildContext context) {
-//     var separatedString = separateString(cityId.coordinate);
-//     var long = separatedString[0];
-//     var lat = separatedString[1];
-//
-//     return ListTile(
-//       tileColor: Colors.white,
-//       subtitle: Text('Long:$long Lat:$lat'),
-//       title: Text(cityId.cityName.toString()),
-//       onTap: () {
-//         // BlocProvider.of<CitySearchBloc>(context)
-//         //     .add(CitySelected(cityId: cityId));
-//         // Navigator.pop(context);
-//       },
-//     );
-//   }
-// }
-//
-// List<String> separateString(String str) {
-//   List<String> splittedString = str.split(',');
-//
-//   return splittedString;
-// }

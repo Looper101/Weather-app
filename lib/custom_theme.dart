@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'theme/color.dart';
 
-
-
 final darkTheme = ThemeData(
   scaffoldBackgroundColor: Colors.black,
   accentColor: Colors.red,
@@ -16,9 +14,6 @@ final lightTheme = ThemeData(
         systemOverlayStyle: SystemUiOverlayStyle.light,
         color: Colors.grey[500]),
     primaryColorBrightness: Brightness.light,
-
-    // scaffoldBackgroundColor: Colors.white,
-    // brightness: Brightness.light,
     accentColor: Pallete.color3,
     primaryColor: Colors.white,
     backgroundColor: Colors.grey,

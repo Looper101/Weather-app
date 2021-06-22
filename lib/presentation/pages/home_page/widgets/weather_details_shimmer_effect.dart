@@ -21,8 +21,6 @@ weatherDetailsLoadingFX() {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: DeviceSize.height * 0.00),
-            // weatherDetailsContainerShimmer(),
-            // windDetails(),
           ],
         ),
       ],

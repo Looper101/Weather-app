@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "editor.fontFamily": "SF Mono Regular",
-    "editor.fontLigatures": true
+    "editor.fontFamily": "Cascadia code",
+    "editor.fontLigatures": true,
+    "editor.smoothScrolling": true
 }

@@ -1,12 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
 import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details.dart';
 import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details_shimmer_effect.dart';
 import 'package:songlyrics/theme/mediaquery.dart';
-
-import 'widgets/build_appbar.dart';
+import 'widgets/show_on_error.dart';
+import 'widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   static String id = 'homepage';
@@ -15,13 +16,43 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation animation;
+  final _animDuration = Duration(seconds: 2);
+  @override
+  void initState() {
+    super.initState();
+
+    controller = AnimationController(vsync: this, duration: _animDuration);
+    animation = Tween<double>(begin: 0, end: 200).animate(controller);
+
+    controller.addStatusListener((status) async {
+      await controlAnimation(status);
+    });
+  }
+
+  Future<void> controlAnimation(AnimationStatus status) async {
+    if (status != AnimationStatus.completed) {
+      //delay/wait for 3 seconds
+      await Future.delayed(_animDuration).then((value) => controller.reverse());
+      //then retract
+      //and at half way fade out
+
+      //! Multiple animation to be  binded together
+      //TODO: Implement Animation
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     DeviceSize deviceOrientation = DeviceSize();
     deviceOrientation.init(context);
+
+    var _bloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
-      drawer: _buildDrawer(context),
+      drawer: buildDrawer(context),
       appBar: buildAppBar(context),
       body: Container(
         height: DeviceSize.height,
@@ -60,122 +91,23 @@ class _HomePageState extends State<HomePage> {
             }
 
             if (state is WeatherLoadCityException) {
-              return Stack(
-                children: [
-                  Positioned(
-                    top: DeviceSize.height * 0.01,
-                    left: DeviceSize.width * 0.05,
-                    child: GestureDetector(
-                      onTap: () => BlocProvider.of<WeatherBloc>(context)
-                          .add(FetchWeatherByLocation()),
-                      child: Container(
-                        // height: DeviceSize.height * 0.09,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
-                        child: RotatedBox(
-                          quarterTurns: 2,
-                          child: Icon(
-                            Icons.navigation_sharp,
-                            size: DeviceSize.longestSide * 0.03,
-                            color: Theme.of(context).errorColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: DeviceSize.height * 0.03,
-                    left: DeviceSize.width * 0.16,
-                    child: Container(
-                      height: DeviceSize.height * 0.03,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: DeviceSize.width * 0.02),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )),
-                      child: Text(
-                        'Fetch Weather for my Location',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontFamily: 'Bold'),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      'City can\'t be found !',
-                      style: TextStyle(
-                          fontFamily: 'Bold',
-                          fontSize: DeviceSize.longestSide * 0.025),
-                    ),
-                  ),
-                ],
-              );
+              return ShowOnError(bloc: _bloc);
             }
 
-            return _buildErrorMessage();
+            return _buildErrorMessage(_bloc);
           },
         ),
       ),
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Theme.of(context).buttonColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              DrawerHeader(
-                padding: EdgeInsets.only(top: 20),
-                child: Text('P-O-I-N-Q'),
-              ),
-              SizedBox(),
-              // ignore: deprecated_member_use
-              FlatButton(
-                color: Colors.blueGrey[200],
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AboutDialog(
-                          applicationName: 'Poinq',
-                          applicationVersion: 'version 1.0.0',
-                          //TODO: add app icon here
-                          applicationIcon: Text('To e added soon'),
-                        );
-                      });
-                },
-                child: Text('About Developer',
-                    style: Theme.of(context).textTheme.headline5.copyWith(
-                        fontSize: DeviceSize.longestSide * 0.03,
-                        fontWeight: FontWeight.w100)),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  _buildErrorMessage() {
+  _buildErrorMessage(WeatherBloc bloc) {
     return Stack(
       children: [
         Positioned(
           top: DeviceSize.height * 0.05,
           left: DeviceSize.width * 0.05,
           child: Container(
-            // height: DeviceSize.height * 0.09,
             alignment: Alignment.center,
             padding: EdgeInsets.all(DeviceSize.longestSide * 0.02),
             decoration: BoxDecoration(
@@ -238,8 +170,7 @@ class _HomePageState extends State<HomePage> {
                   'Retry',
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                onPressed: () => BlocProvider.of<WeatherBloc>(context)
-                    .add(FetchWeatherByLocation()),
+                onPressed: () => bloc.add(FetchWeatherByLocation()),
               ),
             ],
           ),

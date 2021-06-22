@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
-import 'package:songlyrics/models/custom_exception/city_exception.dart';
+import 'package:songlyrics/error/exception/city_exception.dart';
 import 'package:songlyrics/models/weather.dart';
 import 'package:songlyrics/repositories/geolocator_repository.dart';
 import 'package:songlyrics/repositories/weather_repository.dart';
@@ -47,7 +47,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       var result =
           await _weatherRepository.fetchWeatherByCityTyped(event.query);
       yield WeatherLoaded(weather: result);
-    // ignore: unused_catch_clause
+      // ignore: unused_catch_clause
     } on SocketException catch (e) {
       yield WeatherLoadError(errorMessage: 'Check your connection');
       // ignore: unused_catch_clause
