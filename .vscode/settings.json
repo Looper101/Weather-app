@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "editor.fontFamily": "Hasklig",
-    "editor.fontLigatures": true
+    "editor.fontFamily": "Cascadia code",
+    "editor.fontLigatures": true,
+    "editor.smoothScrolling": true
 }
