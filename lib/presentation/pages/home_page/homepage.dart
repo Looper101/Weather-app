@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details.dart';
-import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details_shimmer_effect.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../logic/weatherbloc/barrel.dart';
+import 'widgets/weather_details.dart';
+import 'widgets/weather_details_shimmer_effect.dart';
+import '../../../theme/mediaquery.dart';
 import 'widgets/show_on_error.dart';
 import 'widgets/widgets.dart';
 

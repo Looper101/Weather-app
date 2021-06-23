@@ -1,19 +1,21 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
-import 'package:songlyrics/logic/geolocationbloc/bloc/geolocation_event.dart';
-import 'package:songlyrics/repositories/geolocator_repository.dart';
-part 'geolocation_state.dart';
+
+import 'barrel.dart';
 
 class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
-  GeolocatorRepository _geolocatorRepository;
-  GeolocationBloc({GeolocatorRepository geolocatorRepository})
-      : super(GeolocationInitial()) {
-    _geolocatorRepository = geolocatorRepository ?? GeolocatorRepository();
+  GeolocationBloc(this.location)
+      : assert(location != null),
+        super(GeolocationInitial()) {
+    locationStream = location.onLocationChanged.listen((event) {
+      add(LocationChanged(position: event));
+    });
   }
 
+  StreamSubscription locationStream;
+  final Location location;
   @override
   Stream<GeolocationState> mapEventToState(
     GeolocationEvent event,
@@ -29,12 +31,17 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     yield GeolocationLoading();
 
     try {
-      LocationData locationData =
-          await _geolocatorRepository.getCurrentLocation();
-
-      add(LocationChanged(position: locationData));
+      locationStream = location.onLocationChanged.listen((event) {
+        add(LocationChanged(position: event));
+      });
     } catch (e) {
       yield GeolocationLoadError(errorMessage: e.toString());
     }
+  }
+
+  @override
+  Future<void> close() {
+    locationStream.cancel();
+    return super.close();
   }
 }

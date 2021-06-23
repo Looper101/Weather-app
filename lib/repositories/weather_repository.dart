@@ -1,6 +1,6 @@
-import 'package:songlyrics/datasource/weather_provider.dart';
-import 'package:songlyrics/error/exception/city_exception.dart';
-import 'package:songlyrics/models/weather.dart';
+import '../datasource/weather_provider.dart';
+import '../error/exception/city_exception.dart';
+import '../models/weather.dart';
 
 class WeatherRepository {
   WeatherApi _weatherApi = WeatherApi();

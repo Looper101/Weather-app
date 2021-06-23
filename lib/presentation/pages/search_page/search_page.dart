@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../logic/weatherbloc/barrel.dart';
+import '../../../theme/mediaquery.dart';
 
 class SearchPage extends StatefulWidget {
   static String id = 'searchpage';

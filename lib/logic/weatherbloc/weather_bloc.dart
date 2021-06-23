@@ -2,30 +2,23 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
-import 'package:songlyrics/error/exception/city_exception.dart';
-import 'package:songlyrics/models/weather.dart';
-import 'package:songlyrics/repositories/geolocator_repository.dart';
-import 'package:songlyrics/repositories/weather_repository.dart';
+import '../../error/exception/city_exception.dart';
+import '../../models/weather.dart';
+import '../../repositories/weather_repository.dart';
 
-part 'weather_event.dart';
-part 'weather_state.dart';
+import 'barrel.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherRepository _weatherRepository;
 
-  GeolocatorRepository _geolocatorRepository;
+  WeatherBloc({
+    this.location,
+    WeatherRepository weatherRepository,
+  }) : super(WeatherInitial());
 
-  WeatherBloc(
-      {GeolocatorRepository geolocatorRepository,
-      WeatherRepository weatherRepository})
-      : super(WeatherInitial()) {
-    _weatherRepository = weatherRepository ?? WeatherRepository();
-    _geolocatorRepository = geolocatorRepository ?? GeolocatorRepository();
-  }
+  final Location location;
 
-  StreamSubscription cityBlocSubscription;
   @override
   Stream<WeatherState> mapEventToState(
     WeatherEvent event,
@@ -59,16 +52,14 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Stream<WeatherState> _mapFetchWeatherByLocationToState() async* {
     try {
       yield WeatherLoading();
-      LocationData _location = await _geolocatorRepository.getCurrentLocation();
-      Weather result = await _weatherRepository.fetchWeatherByLocationRepo(
-          latitude: _location.latitude, longitude: _location.longitude);
+      LocationData _location = await location.getLocation();
+      Weather result = await _fetchWeather(_location);
       yield WeatherLoaded(weather: result);
-    } catch (e) {
-      yield WeatherLoadError(errorMessage: 'check your connection');
-    }
+    } catch (e) {}
   }
 
-  void dispose() {
-    cityBlocSubscription.cancel();
+  Future<Weather> _fetchWeather(LocationData _location) {
+    return _weatherRepository.fetchWeatherByLocationRepo(
+        latitude: _location.latitude, longitude: _location.longitude);
   }
 }

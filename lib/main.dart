@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/custom_theme.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/presentation/pages/home_page/homepage.dart';
-import 'package:songlyrics/presentation/pages/search_page/search_page.dart';
-import 'package:songlyrics/repositories/weather_repository.dart';
-import 'package:songlyrics/weather_observer.dart';
+import 'custom_theme.dart';
+import 'injection_container.dart';
 
-import 'repositories/geolocator_repository.dart';
+import 'presentation/pages/home_page/homepage.dart';
+import 'presentation/pages/search_page/search_page.dart';
+import 'weather_observer.dart';
+
+import 'logic/weatherbloc/barrel.dart';
 
 void main() {
   Bloc.observer = WeatherObserver();
@@ -27,9 +27,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => WeatherBloc(
-                geolocatorRepository: GeolocatorRepository(),
-                weatherRepository: WeatherRepository())
+            create: (context) => sl<WeatherBloc>()
               ..add(
                 FetchWeatherByLocation(),
               )),
