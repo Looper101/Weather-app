@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../../theme/mediaquery.dart';
 
 Widget buildDrawer(BuildContext context) {
   return Drawer(

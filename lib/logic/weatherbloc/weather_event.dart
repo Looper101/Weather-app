@@ -1,4 +1,5 @@
-part of 'weather_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:location/location.dart';
 
 abstract class WeatherEvent extends Equatable {
   const WeatherEvent();
@@ -46,4 +47,13 @@ class CitySearchQuery extends WeatherEvent {
 
   @override
   List<Object> get props => [query];
+}
+
+class LocationChanged extends WeatherEvent {
+  final LocationData location;
+
+  LocationChanged(this.location);
+
+  @override
+  List<Object> get props => [location];
 }

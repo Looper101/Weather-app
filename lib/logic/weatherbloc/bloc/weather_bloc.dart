@@ -4,13 +4,14 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:location/location.dart';
+import 'package:songlyrics/datasource/weather_provider.dart';
 import 'package:songlyrics/error/exception/city_exception.dart';
 import 'package:songlyrics/models/weather.dart';
 import 'package:songlyrics/repositories/geolocator_repository.dart';
 import 'package:songlyrics/repositories/weather_repository.dart';
 
-part 'weather_event.dart';
-part 'weather_state.dart';
+import '../barrel.dart';
+import '../weather_bloc.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherRepository _weatherRepository;
@@ -21,8 +22,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       {GeolocatorRepository geolocatorRepository,
       WeatherRepository weatherRepository})
       : super(WeatherInitial()) {
-    _weatherRepository = weatherRepository ?? WeatherRepository();
-    _geolocatorRepository = geolocatorRepository ?? GeolocatorRepository();
+    _weatherRepository = weatherRepository ?? WeatherRepository(WeatherApi());
+    _geolocatorRepository =
+        geolocatorRepository ?? GeolocatorRepository(Location());
   }
 
   StreamSubscription cityBlocSubscription;

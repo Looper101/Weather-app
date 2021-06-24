@@ -2,13 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/theme/color.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../../logic/weatherbloc/barrel.dart';
+import '../../../../theme/color.dart';
+import '../../../../theme/mediaquery.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 weatherDetails(WeatherLoaded state, BuildContext context) {
-  print('rebuild check');
   return Stack(
     children: [
       Positioned(

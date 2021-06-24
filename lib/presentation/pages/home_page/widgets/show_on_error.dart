@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../../logic/weatherbloc/barrel.dart';
+
+import '../../../../theme/mediaquery.dart';
 
 class ShowOnError extends StatelessWidget {
   const ShowOnError({

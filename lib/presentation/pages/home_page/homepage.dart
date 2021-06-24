@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:songlyrics/logic/weatherbloc/bloc/weather_bloc.dart';
-import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details.dart';
-import 'package:songlyrics/presentation/pages/home_page/widgets/weather_details_shimmer_effect.dart';
-import 'package:songlyrics/theme/mediaquery.dart';
+import '../../../logic/weatherbloc/barrel.dart';
+import 'widgets/weather_details.dart';
+import 'widgets/weather_details_shimmer_effect.dart';
+import '../../../theme/mediaquery.dart';
 import 'widgets/show_on_error.dart';
 import 'widgets/widgets.dart';
 
@@ -16,41 +15,12 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation animation;
-  final _animDuration = Duration(seconds: 2);
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(vsync: this, duration: _animDuration);
-    animation = Tween<double>(begin: 0, end: 200).animate(controller);
-
-    controller.addStatusListener((status) async {
-      await controlAnimation(status);
-    });
-  }
-
-  Future<void> controlAnimation(AnimationStatus status) async {
-    if (status != AnimationStatus.completed) {
-      //delay/wait for 3 seconds
-      await Future.delayed(_animDuration).then((value) => controller.reverse());
-      //then retract
-      //and at half way fade out
-
-      //! Multiple animation to be  binded together
-      //TODO: Implement Animation
-    }
-  }
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     DeviceSize deviceOrientation = DeviceSize();
     deviceOrientation.init(context);
 
-    var _bloc = BlocProvider.of<WeatherBloc>(context);
     return Scaffold(
       drawer: buildDrawer(context),
       appBar: buildAppBar(context),
@@ -91,10 +61,10 @@ class _HomePageState extends State<HomePage>
             }
 
             if (state is WeatherLoadCityException) {
-              return ShowOnError(bloc: _bloc);
+              return ShowOnError(bloc: BlocProvider.of<WeatherBloc>(context));
             }
 
-            return _buildErrorMessage(_bloc);
+            return _buildErrorMessage(BlocProvider.of<WeatherBloc>(context));
           },
         ),
       ),
