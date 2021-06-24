@@ -7,7 +7,8 @@ class WeatherApi {
   Future<http.Response> fetchWeatherByCityId(String cityName) async {
     print('fetching data from API');
 
-    String url = '$baseUrl?q=$cityName&appid=$appId&units=metric';
+    String url =
+        "https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$appId&units=metric";
 
     http.Response response = await http.get(url);
 
@@ -16,7 +17,8 @@ class WeatherApi {
 
   Future<http.Response> fectchWeatherByLocationApi(
       {double long, double lat}) async {
-    String url = '$baseUrl?lat=$lat&lon=$long&appid=$appId&units=metric';
+    String url =
+        'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&appid=$appId&units=metric';
     http.Response response = await http.get(url);
 
     return response;
