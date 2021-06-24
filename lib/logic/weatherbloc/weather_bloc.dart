@@ -10,11 +10,11 @@ import '../../repositories/weather_repository.dart';
 import 'barrel.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherRepository _weatherRepository;
+  final WeatherRepository weatherRepository;
 
   WeatherBloc({
     this.location,
-    WeatherRepository weatherRepository,
+    this.weatherRepository,
   }) : super(WeatherInitial());
 
   final Location location;
@@ -37,8 +37,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       yield CitySearched();
       yield WeatherLoading();
-      var result =
-          await _weatherRepository.fetchWeatherByCityTyped(event.query);
+      var result = await weatherRepository.fetchWeatherByCityTyped(event.query);
       yield WeatherLoaded(weather: result);
       // ignore: unused_catch_clause
     } on SocketException catch (e) {
@@ -53,13 +52,17 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       yield WeatherLoading();
       LocationData _location = await location.getLocation();
+      print(_location);
       Weather result = await _fetchWeather(_location);
+      print(result.cityName);
       yield WeatherLoaded(weather: result);
-    } catch (e) {}
+    } catch (e) {
+      yield WeatherLoadError();
+    }
   }
 
-  Future<Weather> _fetchWeather(LocationData _location) {
-    return _weatherRepository.fetchWeatherByLocationRepo(
+  Future<Weather> _fetchWeather(LocationData _location) async {
+    return await weatherRepository.fetchWeatherByLocationRepo(
         latitude: _location.latitude, longitude: _location.longitude);
   }
 }
