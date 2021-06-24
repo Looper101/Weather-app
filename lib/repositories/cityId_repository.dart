@@ -1,6 +1,6 @@
 import 'package:location/location.dart';
-import 'package:songlyrics/datasource/city_api.dart';
-import 'package:songlyrics/models/city_id.dart';
+import '../datasource/city_api.dart';
+import '../models/city_id.dart';
 
 class CityIdRepository {
   CityApi _cityIdApi = CityApi();

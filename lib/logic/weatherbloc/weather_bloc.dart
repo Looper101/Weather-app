@@ -7,7 +7,7 @@ import '../../error/exception/city_exception.dart';
 import '../../models/weather.dart';
 import '../../repositories/weather_repository.dart';
 
-import 'bloc/weather_bloc.dart';
+import 'barrel.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final WeatherRepository weatherRepository;
@@ -29,6 +29,10 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
     if (event is CitySearchQuery) {
       yield* _mapCitySearchQueryToState(event);
+    }
+
+    if (event is LocationChanged) {
+      yield* _mapLocationChangedToState(event);
     }
   }
 
@@ -52,9 +56,9 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     try {
       yield WeatherLoading();
       LocationData _location = await location.getLocation();
-      print(_location);
+
       Weather result = await _fetchWeather(_location);
-      print(result.cityName);
+
       yield WeatherLoaded(weather: result);
     } catch (e) {
       yield WeatherLoadError();
@@ -64,5 +68,16 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   Future<Weather> _fetchWeather(LocationData _location) async {
     return await weatherRepository.fetchWeatherByLocationRepo(
         latitude: _location.latitude, longitude: _location.longitude);
+  }
+
+  _mapLocationChangedToState(LocationChanged event) async* {
+    try {
+      Weather weatherResult = await _fetchWeather(event.location);
+      yield WeatherLoaded(weather: weatherResult);
+    } catch (e) {
+      var oldStateWeather = (state as WeatherLoaded).weather;
+
+      yield WeatherLoaded(weather: oldStateWeather);
+    }
   }
 }

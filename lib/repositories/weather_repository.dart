@@ -1,9 +1,12 @@
 import 'package:songlyrics/datasource/weather_provider.dart';
-import 'package:songlyrics/error/exception/city_exception.dart';
-import 'package:songlyrics/models/weather.dart';
+
+import '../error/exception/city_exception.dart';
+import '../models/weather.dart';
 
 class WeatherRepository {
   WeatherApi _weatherApi = WeatherApi();
+
+  WeatherRepository(WeatherApi weatherApi);
 
   // ignore: missing_return
   Future<Weather> fetchWeatherByCityTyped(String cityName) async {
@@ -26,13 +29,5 @@ class WeatherRepository {
     Weather weather = Weather.fromRawJson(source.body);
 
     return weather;
-  }
-
-  int stringLengthChecker(String value) {
-    if (value.length > 5) {
-      return 6;
-    } else {
-      return 5;
-    }
   }
 }

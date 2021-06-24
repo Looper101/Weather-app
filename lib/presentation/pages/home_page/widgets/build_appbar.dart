@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:songlyrics/presentation/pages/search_page/search_page.dart';
+import '../../search_page/search_page.dart';
 
 Widget buildAppBar(BuildContext context) {
   return PreferredSize(

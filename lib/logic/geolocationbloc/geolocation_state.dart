@@ -1,4 +1,5 @@
-part of 'geolocation_bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:location/location.dart';
 
 abstract class GeolocationState extends Equatable {
   const GeolocationState();
