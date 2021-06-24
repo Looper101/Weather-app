@@ -8,7 +8,6 @@ import '../../../../theme/mediaquery.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 weatherDetails(WeatherLoaded state, BuildContext context) {
-  print('rebuild check');
   return Stack(
     children: [
       Positioned(

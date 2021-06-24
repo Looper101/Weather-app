@@ -14,7 +14,7 @@ class WeatherRepository {
 
     if (source.statusCode == 200) {
       Weather weather = Weather.fromRawJson(source.body);
-      print(weather);
+
       return weather;
     } else if (source.statusCode == 400 || source.statusCode == 404) {
       throw CityException(errorMessage: '$cityName not found');
@@ -23,11 +23,9 @@ class WeatherRepository {
 
   Future<Weather> fetchWeatherByLocationRepo(
       {double latitude, double longitude}) async {
-    print('trying to fetch weather in repo');
-    print('Coordinate:$longitude: $latitude');
     var source = await _weatherApi.fectchWeatherByLocationApi(
         long: longitude, lat: latitude);
-    print(source);
+
     Weather weather = Weather.fromRawJson(source.body);
 
     return weather;
